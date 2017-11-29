@@ -9,11 +9,16 @@ import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.R
 import com.link_value.eventlv.View.ListEvent.EventLvFragment.OnListFragmentInteractionListener
 
-class EventLvListRecyclerViewAdapter(private val mValues: List<EventLV>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
+class EventLvListRecyclerViewAdapter(private var mValues: List<EventLV>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_eventlv, parent, false)
         return ViewHolder(view)
+    }
+
+    fun loadEvents(events: List<EventLV>) {
+        mValues = events
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

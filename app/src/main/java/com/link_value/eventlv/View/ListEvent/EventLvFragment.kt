@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.link_value.eventlv.Model.EventLV
 
 import com.link_value.eventlv.R
@@ -24,10 +25,12 @@ import com.link_value.eventlv.R
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class EventLvFragment : Fragment() {
+class EventLvFragment : Fragment(), EventListView {
+
     // TODO: Customize parameters
     private var mColumnCount = 1
     private var mListener: OnListFragmentInteractionListener? = null
+    private lateinit var mAdapter:EventLvListRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +43,7 @@ class EventLvFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_eventlv_list, container, false)
-
+        mAdapter = EventLvListRecyclerViewAdapter(ArrayList(), mListener)
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()
@@ -49,7 +52,7 @@ class EventLvFragment : Fragment() {
             } else {
                 view.layoutManager = GridLayoutManager(context, mColumnCount)
             }
-            view.adapter = EventLvListRecyclerViewAdapter(ArrayList(), mListener)
+            view.adapter = mAdapter
         }
         return view
     }
@@ -67,6 +70,14 @@ class EventLvFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         mListener = null
+    }
+
+    override fun onEventsFetched(events: List<EventLV>) {
+        mAdapter.loadEvents(events)
+    }
+
+    override fun onErrorEventsFetch(error : String) {
+        Toast.makeText(activity, error,Toast.LENGTH_LONG).show()
     }
 
     /**
