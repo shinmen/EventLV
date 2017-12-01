@@ -7,4 +7,7 @@ import com.link_value.eventlv.Model.EventLV
  */
 interface ListEventPresenter {
     fun fetchComingEvents():List<EventLV>
+    fun onSucessFetchEvents(events: List<EventLV>)
+    fun onErrorFetchEvents(error: String)
+
 }

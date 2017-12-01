@@ -41,6 +41,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:11.6.2'
     compile 'com.google.android.gms:play-services-location:11.6.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$anko_version"
 
 
 }

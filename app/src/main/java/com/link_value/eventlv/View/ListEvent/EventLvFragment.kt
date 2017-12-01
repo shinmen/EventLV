@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.link_value.eventlv.Model.EventLV
-
+import com.link_value.eventlv.Presenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
 
 /**
@@ -31,6 +31,7 @@ class EventLvFragment : Fragment(), EventListView {
     private var mColumnCount = 1
     private var mListener: OnListFragmentInteractionListener? = null
     private lateinit var mAdapter:EventLvListRecyclerViewAdapter
+    private lateinit var mPresenter: ListEventPresenterImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,16 @@ class EventLvFragment : Fragment(), EventListView {
         if (arguments != null) {
             mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
+
+        initPresenter()
+
+    }
+
+    private fun initPresenter() {
+        val listRepo = ListEventRepositoryImpl()
+        mPresenter = ListEventPresenterImpl(this, listRepo)
+
+        mPresenter.fetchComingEvents()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -54,9 +65,10 @@ class EventLvFragment : Fragment(), EventListView {
             }
             view.adapter = mAdapter
         }
+
+
         return view
     }
-
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
