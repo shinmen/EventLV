@@ -42,6 +42,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:11.6.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$anko_version"
-
-
+    compile "org.jetbrains.anko:anko:$anko_version"
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.8.2'
 }

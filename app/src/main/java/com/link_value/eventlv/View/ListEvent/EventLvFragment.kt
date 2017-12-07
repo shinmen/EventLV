@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
+import com.link_value.eventlv.Repository.Network.HttpClient
 
 /**
  * A fragment representing a list of Items.
@@ -45,8 +46,8 @@ class EventLvFragment : Fragment(), EventListView {
     }
 
     private fun initPresenter() {
-        val listRepo = ListEventRepositoryImpl()
-        mPresenter = ListEventPresenterImpl(this, listRepo)
+        val repo = HttpClient()
+        mPresenter = ListEventPresenterImpl(this, repo)
 
         mPresenter.fetchComingEvents()
     }
@@ -54,7 +55,7 @@ class EventLvFragment : Fragment(), EventListView {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_eventlv_list, container, false)
-        mAdapter = EventLvListRecyclerViewAdapter(ArrayList(), mListener)
+        mAdapter = EventLvListRecyclerViewAdapter(activity, ArrayList(), mListener)
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()

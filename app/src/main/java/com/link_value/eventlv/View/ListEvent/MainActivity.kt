@@ -13,6 +13,9 @@ import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, EventLvFragment.OnListFragmentInteractionListener {
     override fun onListFragmentInteraction(event: EventLV) {

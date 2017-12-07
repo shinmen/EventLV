@@ -5,11 +5,7 @@ import android.os.Parcelable
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-
-import java.util.ArrayList
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.TimeZone
+import java.util.*
 
 /**
  * Created by julienb on 29/11/17.
@@ -24,7 +20,7 @@ class EventLV : Parcelable {
 
     @SerializedName("startedAt")
     @Expose
-    var startedAt: Calendar
+    var startedAt: Date? = null
         protected set
 
     @SerializedName("duration")
@@ -52,17 +48,17 @@ class EventLV : Parcelable {
     var participants: List<Partner> = ArrayList()
         protected set
 
-    var locationStreetPictureUrl: String = ""
+    var locationStreetPictureUrl: String? = null
 
-    val endedAt: Calendar
+/*    val endedAt: Calendar
         get() {
             val endedAt = startedAt.clone() as Calendar
             endedAt.add(Calendar.HOUR, duration!!)
 
             return endedAt
-        }
+        }*/
 
-    constructor(title: String, startedAt: Calendar, duration: Int?, locationName: String, address: String, initiator: Partner, participants: List<Partner>) {
+    constructor(title: String, startedAt: Date, duration: Int?, locationName: String, address: String, initiator: Partner, participants: List<Partner>) {
         this.title = title
         this.startedAt = startedAt
         this.duration = duration
@@ -80,11 +76,7 @@ class EventLV : Parcelable {
         `in`.readList(participants, Partner::class.java.classLoader)
         initiator = `in`.readParcelable(Partner::class.java.classLoader)
         duration = `in`.readInt()
-
-        val milliseconds = `in`.readLong()
-        val timezoneId = `in`.readString()
-        startedAt = GregorianCalendar(TimeZone.getTimeZone(timezoneId))
-        startedAt.timeInMillis = milliseconds
+        startedAt = Date(`in`.readLong())
     }
 
     override fun describeContents(): Int {
@@ -100,8 +92,7 @@ class EventLV : Parcelable {
         dest.writeParcelable(initiator, flags)
         dest.writeInt(duration!!)
 
-        dest.writeLong(startedAt.timeInMillis)
-        dest.writeString(startedAt.timeZone.id)
+        dest.writeLong(startedAt!!.time)
     }
 
     companion object {
