@@ -19,6 +19,7 @@ class ListEventPresenterImpl(private val mEventListView: EventListView, private 
 
     override fun fetchComingEvents(): List<EventLV> {
         mListRepo.queryComingEvents(this)
+
         return ArrayList<EventLV>()
     }
 

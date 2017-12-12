@@ -11,6 +11,9 @@ import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.R
 import com.link_value.eventlv.View.ListEvent.EventLvFragment.OnListFragmentInteractionListener
 import com.squareup.picasso.Picasso
+import java.text.DateFormat
+import java.text.DateFormat.getDateInstance
+import java.text.SimpleDateFormat
 
 class EventLvListRecyclerViewAdapter(private val context: Context, private var mValues: List<EventLV>, private val mListener: OnListFragmentInteractionListener?) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
 
@@ -28,13 +31,15 @@ class EventLvListRecyclerViewAdapter(private val context: Context, private var m
         val event = mValues.get(position)
         Picasso.with(context)
                 .load(event.locationStreetPictureUrl)
-                .resize(50, 50)
+                .fit()
                 .centerCrop()
                 .placeholder(R.drawable.ic_menu_gallery)
                 .into(holder.mLocationPictureView)
         holder.mLocationName.text = event.locationName
         holder.mTitleView.text = event.title
-        holder.mStartTimeView.text = event.startedAt.toString()
+        val startedAt = event.startedAt
+        val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startedAt)
+        holder.mStartTimeView.text = date
 
         holder.mView.setOnClickListener {
             if (null != mListener) {

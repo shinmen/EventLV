@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.link_value.eventlv.View.ListEvent.EventLvFragment"
-    tools:listitem="@layout/fragment_eventlv" />
+    tools:listitem="@layout/fragment_eventlv"
+    />

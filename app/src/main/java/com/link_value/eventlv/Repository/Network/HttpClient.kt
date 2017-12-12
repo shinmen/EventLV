@@ -1,34 +1,20 @@
 package com.link_value.eventlv.Repository.Network
 
-import android.support.v4.util.ArrayMap
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import com.google.gson.GsonBuilder
-import com.link_value.eventlv.Model.EventLV
-import com.link_value.eventlv.Presenter.ListEventPresenter
-import com.link_value.eventlv.Repository.List.ListEventRepository
-import com.link_value.eventlv.Repository.List.StreetViewRepository
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import ru.gildor.coroutines.retrofit.await
-
 
 /**
  * Created by julienb on 01/12/17.
  */
-class HttpClient: ListEventRepository, StreetViewRepository {
+class HttpClient {
 
-    private val api :HttpEventLvInterface
+    val retrofit: Retrofit.Builder
 
     companion object {
         val TAG = HttpClient.javaClass.simpleName
-        val BASE_URL = "http://api.jbouffard.fr"
     }
 
     init {
@@ -41,29 +27,35 @@ class HttpClient: ListEventRepository, StreetViewRepository {
         val gson = GsonBuilder()
                 .setDateFormat("yyyy-M-dd hh:mm:ss")
                 .create()
-        val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
+        retrofit = Retrofit.Builder()
+                //.baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build())
-                .build()
-        api = retrofit.create(HttpEventLvInterface::class.java)
+                //.build()
+        //api = retrofit.create(HttpEventLvInterface::class.java)
     }
 
-    override fun queryComingEvents(listener: ListEventPresenter) {
+    fun build(request: Class<HttpRequest>, baseUrl: String): HttpRequest {
+        val api = retrofit.baseUrl(baseUrl).build()
+
+        return api.create(request)
+    }
+
+/*    override fun queryComingEvents(listener: ListEventPresenter) {
         launch(UI) {
             //val response = fetchStreetView()
             //try {
                 val list = getComingEvents()
                 list.forEach {
-                    //val response = requestStreetView()
-                    //it.locationStreetPictureUrl = response.string()
+                    val response = requestStreetView()
+                    it.locationStreetPictureUrl = response.string()
                 }
                 listener.onSuccessFetchEvents(list)
-            /*} catch (e:Exception) {
+            *//*} catch (e:Exception) {
                 listener.onErrorFetchEvents(e.message!!)
-            }*/
+            }*//*
 
-        }
+        }*/
 
        /* val call:Call<List<EventLV>> = api.getComingEvents()
 
@@ -83,7 +75,7 @@ class HttpClient: ListEventRepository, StreetViewRepository {
         })*/
     }
 
-    override fun fetchStreetView() {
+ /*   override fun fetchStreetView() {
         launch(UI) {
             val response = requestStreetView()
 
@@ -101,5 +93,4 @@ class HttpClient: ListEventRepository, StreetViewRepository {
         map.put("size", "400x400")
 
         return api.getStreetView(map).await()
-    }
-}
+    }*/

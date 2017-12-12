@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
+import com.link_value.eventlv.Repository.List.ListEventRepositoryImpl
 import com.link_value.eventlv.Repository.Network.HttpClient
 
 /**
@@ -46,7 +47,7 @@ class EventLvFragment : Fragment(), EventListView {
     }
 
     private fun initPresenter() {
-        val repo = HttpClient()
+        val repo = ListEventRepositoryImpl(HttpClient())
         mPresenter = ListEventPresenterImpl(this, repo)
 
         mPresenter.fetchComingEvents()

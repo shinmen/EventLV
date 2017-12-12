@@ -1,5 +1,6 @@
 package com.link_value.eventlv.Repository.List
 
+import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListEventPresenter
 
 /**
