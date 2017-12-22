@@ -1,26 +1,18 @@
 package com.link_value.eventlv.View.ListEvent
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.R
+import com.link_value.eventlv.View.Create.NewEventLvActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, EventLvFragment.OnListFragmentInteractionListener {
-    override fun onListFragmentInteraction(event: EventLV) {
-        Toast.makeText(this, event.title, Toast.LENGTH_LONG).show()
-    }
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +27,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            NewEventLvActivity().newIntent(this)
         }
 
         val toggle = ActionBarDrawerToggle(

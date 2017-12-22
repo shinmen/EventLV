@@ -16,19 +16,16 @@ import java.net.URLEncoder
 /**
  * Created by julienb on 08/12/17.
  */
-class ListEventRepositoryImpl(private val httpClient: HttpClient): ListEventRepository {
+class ListEventRepositoryImpl(private val httpClient: HttpClient, private val streetViewRepo: StreetViewRepository): ListEventRepository {
 
     override fun queryComingEvents(listener: ListEventPresenter) {
         val api = httpClient.retrofit.baseUrl(HttpEventLvInterface.BASE_URL).build()
         val repoEvents = api.create(HttpEventLvInterface::class.java)
-        val repoStreetView = api.create(HttpGoogleMapInterface::class.java)
 
         launch(UI) {
             val list = requestComingEvents(repoEvents)
             list.forEach({
-                val builder = StringBuilder("https://maps.googleapis.com/maps/api/streetview?key=AIzaSyDzTRrAfaiouHUeuRuXuLhzlvukzMXUFsE&size=400x400&location=")
-                builder.append(URLEncoder.encode(it.address, "UTF-8"))
-                it.locationStreetPictureUrl = builder.toString()
+                it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
             })
 
             listener.onSuccessFetchEvents(list)
@@ -38,6 +35,4 @@ class ListEventRepositoryImpl(private val httpClient: HttpClient): ListEventRepo
     suspend private fun requestComingEvents(repo: HttpEventLvInterface): List<EventLV> {
         return repo.getComingEvents().await()
     }
-
-    //suspend private fun requestStreetView(repo: HttpGoogleMapInterface):
 }

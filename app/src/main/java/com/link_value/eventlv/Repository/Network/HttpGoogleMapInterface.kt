@@ -12,7 +12,4 @@ interface HttpGoogleMapInterface {
     companion object {
         val BASE_URL = "https://maps.googleapis.com/maps/api/"
     }
-
-    @GET("streetview")
-    fun getStreetView(@QueryMap parameters: Map<String, String>): Call<ResponseBody>
 }

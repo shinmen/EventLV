@@ -19,12 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_geo_key" />
-        <meta-data
-            android:name="com.google.android.streetView.API_KEY"
-            android:value="@string/streetview_api_key" />
+        <activity android:name=".View.Create.NewEventLvActivity"></activity>
     </application>
 
 </manifest>

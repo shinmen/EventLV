@@ -10,11 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.link_value.eventlv.Event.DisplayEventLvDetail
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
 import com.link_value.eventlv.Repository.List.ListEventRepositoryImpl
+import com.link_value.eventlv.Repository.List.StreetViewRepositoryImpl
 import com.link_value.eventlv.Repository.Network.HttpClient
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * A fragment representing a list of Items.
@@ -31,7 +35,6 @@ class EventLvFragment : Fragment(), EventListView {
 
     // TODO: Customize parameters
     private var mColumnCount = 1
-    private var mListener: OnListFragmentInteractionListener? = null
     private lateinit var mAdapter:EventLvListRecyclerViewAdapter
     private lateinit var mPresenter: ListEventPresenterImpl
 
@@ -42,12 +45,28 @@ class EventLvFragment : Fragment(), EventListView {
             mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
         }
 
+        EventBus.getDefault().register(this)
         initPresenter()
+    }
 
+    override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
+        super.onDestroy()
+    }
+
+    @Subscribe()
+    fun onDisplayDetail(ev: DisplayEventLvDetail) {
+        Toast.makeText(activity, ev.eventLv.title, Toast.LENGTH_LONG).show()
     }
 
     private fun initPresenter() {
-        val repo = ListEventRepositoryImpl(HttpClient())
+        val streetviewBaseUrl = resources.getString(
+                R.string.streetview_picture_base_url,
+                "400x400",
+                resources.getString(R.string.streetview_api_key)
+        )
+        val streetviewRepo = StreetViewRepositoryImpl(streetviewBaseUrl)
+        val repo = ListEventRepositoryImpl(HttpClient(), streetviewRepo)
         mPresenter = ListEventPresenterImpl(this, repo)
 
         mPresenter.fetchComingEvents()
@@ -56,7 +75,7 @@ class EventLvFragment : Fragment(), EventListView {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_eventlv_list, container, false)
-        mAdapter = EventLvListRecyclerViewAdapter(activity, ArrayList(), mListener)
+        mAdapter = EventLvListRecyclerViewAdapter(activity, emptyList())
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()
@@ -72,40 +91,12 @@ class EventLvFragment : Fragment(), EventListView {
         return view
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            mListener = context
-        } else {
-            throw RuntimeException(context!!.toString() + " must implement OnListFragmentInteractionListener")
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
-    }
-
     override fun onEventsFetched(events: List<EventLV>) {
         mAdapter.loadEvents(events)
     }
 
     override fun onErrorEventsFetch(error : String) {
         Toast.makeText(activity, error,Toast.LENGTH_LONG).show()
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(event: EventLV)
     }
 
     companion object {
