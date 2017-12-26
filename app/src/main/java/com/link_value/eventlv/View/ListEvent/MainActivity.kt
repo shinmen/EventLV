@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         fab.setOnClickListener { view ->
-            NewEventLvActivity().newIntent(this)
+            val i = NewEventLvActivity.newIntent(this)
+            startActivity(i)
         }
 
         val toggle = ActionBarDrawerToggle(

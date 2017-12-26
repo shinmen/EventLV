@@ -6,4 +6,58 @@
     android:layout_height="match_parent"
     tools:context="com.link_value.eventlv.View.Create.NewEventLvActivity">
 
+    <EditText
+        android:id="@+id/event_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="event name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        />
+
+    <AutoCompleteTextView
+        android:id="@+id/event_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionHint="adresse"
+        android:text="event address"
+        app:layout_constraintTop_toBottomOf="@+id/event_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="event date"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@+id/event_address"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="start time"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@+id/event_address"
+        app:layout_constraintLeft_toRightOf="@+id/event_date"
+        />
+
+    <SeekBar
+        android:id="@+id/event_duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="72"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/event_date" />
+
 </android.support.constraint.ConstraintLayout>

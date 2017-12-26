@@ -17,15 +17,13 @@ import com.link_value.eventlv.R
 import com.link_value.eventlv.Repository.List.ListEventRepositoryImpl
 import com.link_value.eventlv.Repository.List.StreetViewRepositoryImpl
 import com.link_value.eventlv.Repository.Network.HttpClient
+import com.link_value.eventlv.View.Detail.DetailEventLvActivity
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 /**
  * A fragment representing a list of Items.
  *
- *
- * Activities containing this fragment MUST implement the [OnListFragmentInteractionListener]
- * interface.
  */
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the
@@ -56,6 +54,7 @@ class EventLvFragment : Fragment(), EventListView {
 
     @Subscribe()
     fun onDisplayDetail(ev: DisplayEventLvDetail) {
+        DetailEventLvActivity.newIntent(activity, ev.eventLv)
         Toast.makeText(activity, ev.eventLv.title, Toast.LENGTH_LONG).show()
     }
 
@@ -96,7 +95,7 @@ class EventLvFragment : Fragment(), EventListView {
     }
 
     override fun onErrorEventsFetch(error : String) {
-        Toast.makeText(activity, error,Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
     }
 
     companion object {
@@ -110,6 +109,7 @@ class EventLvFragment : Fragment(), EventListView {
             val args = Bundle()
             args.putInt(ARG_COLUMN_COUNT, columnCount)
             fragment.arguments = args
+
             return fragment
         }
     }
