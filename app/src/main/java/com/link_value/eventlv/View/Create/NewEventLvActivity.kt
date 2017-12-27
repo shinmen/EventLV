@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.Subscribe
 
 class NewEventLvActivity : AppCompatActivity()
 {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_event_lv)
@@ -44,12 +43,12 @@ class NewEventLvActivity : AppCompatActivity()
 
     @Subscribe()
     fun onDatePicked(date: PostDateEvent) {
-        event_date.text = date.toString()
+        input_date.text = date.toString()
     }
 
     @Subscribe()
     fun onTimePicked(date: PostTimeEvent) {
-        event_time.text = date.toString()
+        input_time.text = date.toString()
     }
 
     companion object {
