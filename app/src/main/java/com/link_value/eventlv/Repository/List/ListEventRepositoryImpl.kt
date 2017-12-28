@@ -1,17 +1,12 @@
 package com.link_value.eventlv.Repository.List
 
 import com.link_value.eventlv.Model.EventLV
-import com.link_value.eventlv.Presenter.ListEventPresenter
-import com.link_value.eventlv.Repository.Network.HttpClient
-import com.link_value.eventlv.Repository.Network.HttpEventLvInterface
-import com.link_value.eventlv.Repository.Network.HttpGoogleMapInterface
-import com.link_value.eventlv.Repository.Network.HttpRequest
+import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenter
+import com.link_value.eventlv.Infrastructure.Network.HttpClient
+import com.link_value.eventlv.Infrastructure.Network.HttpEventLvInterface
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import retrofit2.Call
 import ru.gildor.coroutines.retrofit.await
-import java.net.URLEncoder
 
 /**
  * Created by julienb on 08/12/17.
@@ -23,12 +18,16 @@ class ListEventRepositoryImpl(private val httpClient: HttpClient, private val st
         val repoEvents = api.create(HttpEventLvInterface::class.java)
 
         launch(UI) {
-            val list = requestComingEvents(repoEvents)
-            list.forEach({
-                it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
-            })
+            try {
+                val list = requestComingEvents(repoEvents)
+                list.forEach({
+                    it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
+                })
 
-            listener.onSuccessFetchEvents(list)
+                listener.onSuccessFetchEvents(list)
+            } catch (ex: Exception) {
+                listener.onErrorFetchEvents(ex.message)
+            }
         }
     }
 

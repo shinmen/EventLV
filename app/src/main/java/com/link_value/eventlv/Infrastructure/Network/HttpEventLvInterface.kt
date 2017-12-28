@@ -1,4 +1,4 @@
-package com.link_value.eventlv.Repository.Network
+package com.link_value.eventlv.Infrastructure.Network
 
 import com.link_value.eventlv.Model.EventLV
 import retrofit2.Call

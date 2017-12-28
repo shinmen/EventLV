@@ -46,4 +46,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.8.2'
     compile 'org.greenrobot:eventbus:3.1.1'
+    compile 'com.google.maps.android:android-maps-utils:0.4'
 }

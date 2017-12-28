@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.link_value.eventlv">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
+    <uses-feature android:name="android.hardware.location.gps" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,16 +23,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.Create.NewEventLvActivity"
-            android:theme="@style/AppTheme"
-            />
-        <activity android:name=".View.Detail.DetailEventLvActivity"
-            android:theme="@style/AppTheme"
-            />
+        <activity
+            android:name=".View.Create.NewEventLvActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".View.Detail.DetailEventLvActivity"
+            android:theme="@style/AppTheme" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_api_key"/>
+
     </application>
 
 </manifest>

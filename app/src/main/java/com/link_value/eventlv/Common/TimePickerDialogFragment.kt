@@ -21,7 +21,6 @@ class TimePickerDialogFragment: DialogFragment(),
         TimePickerDialog.OnTimeSetListener
 {
     companion object {
-        val SAVED_TIME = "timepicker_fragment.time"
         private val ARG_TIME = "time"
 
         fun newInstance(date: Date): TimePickerDialogFragment {

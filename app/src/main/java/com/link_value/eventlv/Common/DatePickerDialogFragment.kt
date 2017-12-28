@@ -17,7 +17,6 @@ class DatePickerDialogFragment : DialogFragment(),
         DatePickerDialog.OnDateSetListener
 {
     companion object {
-        val SAVED_DATE = "datepicker_fragment.date"
         private val ARG_DATE = "date"
 
         fun newInstance(date: Date): DatePickerDialogFragment {

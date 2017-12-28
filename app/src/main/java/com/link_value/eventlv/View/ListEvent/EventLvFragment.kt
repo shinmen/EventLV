@@ -1,6 +1,5 @@
 package com.link_value.eventlv.View.ListEvent
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -12,11 +11,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.link_value.eventlv.Event.DisplayEventLvDetail
 import com.link_value.eventlv.Model.EventLV
-import com.link_value.eventlv.Presenter.ListEventPresenterImpl
+import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
 import com.link_value.eventlv.Repository.List.ListEventRepositoryImpl
 import com.link_value.eventlv.Repository.List.StreetViewRepositoryImpl
-import com.link_value.eventlv.Repository.Network.HttpClient
+import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.View.Detail.DetailEventLvActivity
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -62,7 +61,7 @@ class EventLvFragment : Fragment(), EventListView {
         val streetviewBaseUrl = resources.getString(
                 R.string.streetview_picture_base_url,
                 "400x400",
-                resources.getString(R.string.streetview_api_key)
+                resources.getString(R.string.google_streetview_api_key)
         )
         val streetviewRepo = StreetViewRepositoryImpl(streetviewBaseUrl)
         val repo = ListEventRepositoryImpl(HttpClient(), streetviewRepo)
@@ -94,7 +93,7 @@ class EventLvFragment : Fragment(), EventListView {
         mAdapter.loadEvents(events)
     }
 
-    override fun onErrorEventsFetch(error : String) {
+    override fun onErrorEventsFetch(error : String?) {
         Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
     }
 

@@ -7,5 +7,5 @@ import com.link_value.eventlv.Model.EventLV
  */
 interface EventListView {
     fun onEventsFetched(events :List<EventLV>)
-    fun onErrorEventsFetch(error :String)
+    fun onErrorEventsFetch(error :String?)
 }

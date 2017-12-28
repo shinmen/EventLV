@@ -1,9 +1,4 @@
-package com.link_value.eventlv.Repository.Network
-
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.QueryMap
+package com.link_value.eventlv.Infrastructure.Network
 
 /**
  * Created by julienb on 08/12/17.

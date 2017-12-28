@@ -1,6 +1,6 @@
 package com.link_value.eventlv.Repository.List
 
-import com.link_value.eventlv.Presenter.ListEventPresenter
+import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenter
 
 /**
  * Created by julienb on 30/11/17.

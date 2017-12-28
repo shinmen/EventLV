@@ -13,5 +13,9 @@
     <string name="label_event_name">Nom de l\'event</string>
     <string name="label_event_address">Adresse du lieu</string>
     <string name="label_event_date">Commence le</string>
-    <string name="label_event_time">Débute à</string>
+    <string name="label_event_time">à</string>
+    <string name="title_activity_test">TestActivity</string>
+
+    <string name="streetview_picture_base_url">https://maps.googleapis.com/maps/api/streetview?size=%1$s&amp;key=%2$s&amp;location=</string>
+
 </resources>

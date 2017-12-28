@@ -1,4 +1,4 @@
-package com.link_value.eventlv.Presenter
+package com.link_value.eventlv.Presenter.ListPresenter
 
 import com.link_value.eventlv.Model.EventLV
 
@@ -8,6 +8,6 @@ import com.link_value.eventlv.Model.EventLV
 interface ListEventPresenter {
     fun fetchComingEvents():List<EventLV>
     fun onSuccessFetchEvents(events: List<EventLV>)
-    fun onErrorFetchEvents(error: String)
+    fun onErrorFetchEvents(error: String?)
 
 }

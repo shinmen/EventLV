@@ -50,14 +50,6 @@ class EventLV : Parcelable {
 
     var locationStreetPictureUrl: String? = null
 
-/*    val endedAt: Calendar
-        get() {
-            val endedAt = startedAt.clone() as Calendar
-            endedAt.add(Calendar.HOUR, duration!!)
-
-            return endedAt
-        }*/
-
     constructor(title: String, startedAt: Date, duration: Int?, locationName: String, address: String, initiator: Partner, participants: List<Partner>) {
         this.title = title
         this.startedAt = startedAt
@@ -68,7 +60,7 @@ class EventLV : Parcelable {
         this.participants = participants
     }
 
-    protected constructor(`in`: Parcel) {
+    private constructor(`in`: Parcel) {
         title = `in`.readString()
         locationName = `in`.readString()
         address = `in`.readString()
