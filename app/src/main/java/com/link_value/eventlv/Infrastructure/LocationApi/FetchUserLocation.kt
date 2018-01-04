@@ -5,6 +5,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import kotlin.coroutines.experimental.suspendCoroutine
 
 
@@ -13,26 +14,21 @@ import kotlin.coroutines.experimental.suspendCoroutine
  */
 class FetchUserLocation(private val locationManager: LocationManager) {
 
-    private var currentLocation :Location? = null
+    companion object {
+        val LV_LATLNG = LatLng(48.883003, 2.316180)
+    }
 
     suspend fun fetchLocation(): Location? {
-        val locationProvider = LocationManager.GPS_PROVIDER
-
         try {
-            currentLocation = locationManager.getLastKnownLocation(locationProvider)
-            if (currentLocation == null) {
-                currentLocation = locationManager.await()
-            }
-
-            return currentLocation
+            return locationManager.await(LocationManager.GPS_PROVIDER)
         } catch (ex: SecurityException) {
             throw UnknownLocationException()
         }
     }
 
-    private suspend fun LocationManager.await(): Location = suspendCoroutine { cont ->
+    private suspend fun LocationManager.await(locationProvider: String): Location = suspendCoroutine { cont ->
         try {
-            requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.toFloat(), object :LocationListener{
+            requestLocationUpdates(locationProvider, 0, 0.toFloat(), object :LocationListener{
                 override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
                 }
 
