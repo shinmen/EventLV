@@ -12,6 +12,7 @@ import android.location.LocationManager
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
+import android.text.SpannableString
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
@@ -38,6 +39,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import kotlin.collections.ArrayList
 
 
@@ -46,6 +48,8 @@ class NewEventLvActivity : AppCompatActivity(),
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
+    private lateinit var adapter: AutoCompleteAddressAdapter
+
     override fun onConnectionFailed(p0: ConnectionResult) {
         Toast.makeText(this@NewEventLvActivity, "impossible de se connecter", Toast.LENGTH_SHORT).show()
     }
@@ -55,10 +59,9 @@ class NewEventLvActivity : AppCompatActivity(),
     override fun onConnected(p0: Bundle?) {
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val autoComplete = AutocompleteAddress(FetchUserLocation(locationManager), googleApiClient)
-        val adapter = AutoCompleteAddressAdapter(this@NewEventLvActivity, android.R.layout.simple_list_item_1)
-
+        adapter = AutoCompleteAddressAdapter(this@NewEventLvActivity, android.R.layout.simple_list_item_1)
         input_address.setAdapter(adapter)
-        input_address.threshold = 4
+        input_address.threshold = 3
         input_address.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
             }
@@ -68,15 +71,8 @@ class NewEventLvActivity : AppCompatActivity(),
 
             override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (query.toString().length >= 4) {
-                    Toast.makeText(this@NewEventLvActivity, query.toString(), Toast.LENGTH_SHORT).show()
-                    launch (UI) {
-                        try {
-                            val predictions = autoComplete.getPredictions(query.toString())
-                            adapter.update(predictions)
-                            adapter.filter.filter(query)
-                        } catch (e: Exception) {
-                            Toast.makeText(this@NewEventLvActivity, e.javaClass.simpleName + e.message, Toast.LENGTH_LONG).show()
-                        }
+                    launch(UI) {
+                        adapter.update(autoComplete.getPredictions(query.toString()))
                     }
                 }
             }
