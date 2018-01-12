@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
@@ -35,12 +37,11 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
-import kotlinx.coroutines.experimental.CommonPool
+import com.link_value.eventlv.Infrastructure.LocationApi.UnknownLocationException
+import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
 import kotlin.collections.ArrayList
+import kotlin.coroutines.experimental.suspendCoroutine
 
 
 class NewEventLvActivity : AppCompatActivity(),
@@ -71,12 +72,48 @@ class NewEventLvActivity : AppCompatActivity(),
 
             override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (query.toString().length >= 4) {
-                    launch(UI) {
-                        adapter.update(autoComplete.getPredictions(query.toString()))
-                    }
+                    /*launch(UI) {
+                        val userLoc = FetchUserLocation(locationManager)
+                        //val loc = userLoc.fetchLocation()
+
+                        val loc = locationManager.await(LocationManager.GPS_PROVIDER)
+                        input_name.text = Editable.Factory.getInstance().newEditable(loc.toString())
+                    }*/
+
+
+                        launch(UI) {
+                            val userLoc = FetchUserLocation(locationManager)
+                            //var loc: Location? = null
+                            val loc = userLoc.fetchLocation()
+                            adapter.update(autoComplete.getPredictions(query.toString(), loc))
+                        }
+
                 }
             }
         })
+    }
+
+    private suspend fun LocationManager.await(locationProvider: String): Location? = suspendCancellableCoroutine { cont ->
+        try {
+            requestLocationUpdates(locationProvider, 0, 0.toFloat(), object : LocationListener {
+                override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
+                }
+
+                override fun onProviderEnabled(p0: String?) {
+                }
+
+                override fun onProviderDisabled(p0: String?) {
+                    cont.resumeWithException(UnknownLocationException())
+                }
+
+                override fun onLocationChanged(location: Location?) {
+                    cont.resume(location)
+                    //locationManager.removeUpdates(this)
+                }
+            })
+        } catch (ex: SecurityException) {
+            cont.resumeWithException(ex)
+        }
     }
 
     override fun onConnectionSuspended(p0: Int) {
@@ -119,7 +156,7 @@ class NewEventLvActivity : AppCompatActivity(),
                 .addConnectionCallbacks(this)
                 //.addOnConnectionFailedListener(this)
                 .build()
-        googleApiClient.disconnect()
+        //googleApiClient.disconnect()
 
     }
 

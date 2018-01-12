@@ -4,8 +4,17 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
+import android.os.Process
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
+import com.link_value.eventlv.Infrastructure.GoogleServiceConcurrentHandler
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.channels.SendChannel
+import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.suspendCoroutine
 
 
@@ -19,7 +28,6 @@ class FetchUserLocation(val locationManager: LocationManager) {
     }
 
     suspend fun fetchLocation(): Location? {
-
         try {
             var location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             val locationUpdated = locationManager.await(LocationManager.GPS_PROVIDER)
@@ -29,7 +37,7 @@ class FetchUserLocation(val locationManager: LocationManager) {
 
             return location
         } catch (ex: SecurityException) {
-            throw UnknownLocationException()
+            throw ex
         }
     }
 

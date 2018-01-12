@@ -14,8 +14,10 @@ import java.util.*
 /**
  * Created by julo on 30/12/17.
  */
-class AutoCompleteAddressAdapter(context: Context, resource: Int) : ArrayAdapter<AddressEventLV>(context, resource)
+class AutoCompleteAddressAdapter(context: Context, resource: Int) : ArrayAdapter<AddressEventLV>(context, resource),
+        Filterable
 {
+
     private var addresses = ArrayList<AddressEventLV>()
 
 

@@ -1,5 +1,6 @@
 package com.link_value.eventlv.Infrastructure.LocationApi
 
+import android.location.Location
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.location.places.AutocompletePredictionBuffer
@@ -11,6 +12,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.SphericalUtil
 import com.link_value.eventlv.Model.AddressEventLV
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.newSingleThreadContext
+import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.coroutines.experimental.suspendCoroutine
 
 
@@ -19,21 +23,24 @@ import kotlin.coroutines.experimental.suspendCoroutine
  */
 class AutocompleteAddress(private val userLocation: FetchUserLocation, private val googleApiClient: GoogleApiClient) {
 
-    suspend fun getPredictions(query: String): ArrayList<AddressEventLV> {
-        //val location = userLocation.fetchLocation()
-        //val latLng = LatLng(location!!.latitude, location!!.longitude)
-        val latLng = FetchUserLocation.LV_LATLNG
+    suspend fun getPredictions(query: String, location: Location?): ArrayList<AddressEventLV> {
+        val addressList = ArrayList<AddressEventLV>()
+        /*var location: Location? = null
+        val j = launch {
+            location = userLocation.fetchLocation()
+        }
+        j.join()*/
+
+        val latLng = LatLng(location!!.latitude, location!!.longitude)
         val southwest = SphericalUtil.computeOffset(latLng, 1500 * Math.sqrt(2.0), 225.toDouble())
         val northeast = SphericalUtil.computeOffset(latLng, 1500 * Math.sqrt(2.0), 45.toDouble())
         val bounds = LatLngBounds(southwest, northeast)
-        val addressList = ArrayList<AddressEventLV>()
-        val job = launch(CommonPool) {
+        val job = launch {
             val result = Places.GeoDataApi.getAutocompletePredictions(googleApiClient, query, bounds, null)
             val predictions = result.await()
             predictions.forEach {
                 addressList.add(AddressEventLV(it.getPrimaryText(null).toString(), it.getSecondaryText(null).toString()))
             }
-
             predictions.release()
         }
         job.join()
