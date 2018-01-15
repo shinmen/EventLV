@@ -72,48 +72,15 @@ class NewEventLvActivity : AppCompatActivity(),
 
             override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (query.toString().length >= 4) {
-                    /*launch(UI) {
-                        val userLoc = FetchUserLocation(locationManager)
-                        //val loc = userLoc.fetchLocation()
+                    val userLocation = FetchUserLocation(locationManager)
 
-                        val loc = locationManager.await(LocationManager.GPS_PROVIDER)
-                        input_name.text = Editable.Factory.getInstance().newEditable(loc.toString())
-                    }*/
-
-
-                        launch(UI) {
-                            val userLoc = FetchUserLocation(locationManager)
-                            //var loc: Location? = null
-                            val loc = userLoc.fetchLocation()
-                            adapter.update(autoComplete.getPredictions(query.toString(), loc))
-                        }
-
+                    launch(UI) {
+                        val location = userLocation.fetchLocation()
+                        adapter.update(autoComplete.getPredictions(query.toString(), location))
+                    }
                 }
             }
         })
-    }
-
-    private suspend fun LocationManager.await(locationProvider: String): Location? = suspendCancellableCoroutine { cont ->
-        try {
-            requestLocationUpdates(locationProvider, 0, 0.toFloat(), object : LocationListener {
-                override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-                }
-
-                override fun onProviderEnabled(p0: String?) {
-                }
-
-                override fun onProviderDisabled(p0: String?) {
-                    cont.resumeWithException(UnknownLocationException())
-                }
-
-                override fun onLocationChanged(location: Location?) {
-                    cont.resume(location)
-                    //locationManager.removeUpdates(this)
-                }
-            })
-        } catch (ex: SecurityException) {
-            cont.resumeWithException(ex)
-        }
     }
 
     override fun onConnectionSuspended(p0: Int) {

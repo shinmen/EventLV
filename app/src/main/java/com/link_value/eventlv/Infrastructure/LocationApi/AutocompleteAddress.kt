@@ -25,12 +25,6 @@ class AutocompleteAddress(private val userLocation: FetchUserLocation, private v
 
     suspend fun getPredictions(query: String, location: Location?): ArrayList<AddressEventLV> {
         val addressList = ArrayList<AddressEventLV>()
-        /*var location: Location? = null
-        val j = launch {
-            location = userLocation.fetchLocation()
-        }
-        j.join()*/
-
         val latLng = LatLng(location!!.latitude, location!!.longitude)
         val southwest = SphericalUtil.computeOffset(latLng, 1500 * Math.sqrt(2.0), 225.toDouble())
         val northeast = SphericalUtil.computeOffset(latLng, 1500 * Math.sqrt(2.0), 45.toDouble())
