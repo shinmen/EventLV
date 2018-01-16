@@ -1,11 +1,11 @@
-package com.link_value.eventlv.Common
+package com.link_value.eventlv.View.Common
 
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.widget.DatePicker
-import com.link_value.eventlv.Event.PostDateEvent
+import com.link_value.eventlv.Model.Event.PostDateEvent
 import com.link_value.eventlv.R
 import org.greenrobot.eventbus.EventBus
 import java.util.*
@@ -30,7 +30,7 @@ class DatePickerDialogFragment : DialogFragment(),
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val date = arguments.getSerializable(ARG_DATE) as Date
+        val date = arguments!!.getSerializable(ARG_DATE) as Date
         // Use the current time as the default values for the picker
         val c = Calendar.getInstance()
         c.time = date

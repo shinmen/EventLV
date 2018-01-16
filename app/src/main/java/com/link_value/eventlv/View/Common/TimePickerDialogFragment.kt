@@ -1,14 +1,11 @@
-package com.link_value.eventlv.Common
+package com.link_value.eventlv.View.Common
 
 import android.app.TimePickerDialog
-import android.content.Intent
-import android.app.Activity
 import android.app.Dialog
 import android.widget.TimePicker
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.util.Log
-import com.link_value.eventlv.Event.PostTimeEvent
+import com.link_value.eventlv.Model.Event.PostTimeEvent
 import com.link_value.eventlv.R
 import org.greenrobot.eventbus.EventBus
 import java.util.*

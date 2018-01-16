@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.link_value.eventlv.Event.DisplayEventLvDetail
+import com.link_value.eventlv.Model.Event.DisplayEventLvDetail
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
@@ -39,7 +39,7 @@ class EventLvFragment : Fragment(), EventListView {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
-            mColumnCount = arguments.getInt(ARG_COLUMN_COUNT)
+            mColumnCount = arguments!!.getInt(ARG_COLUMN_COUNT)
         }
 
         EventBus.getDefault().register(this)
@@ -53,7 +53,7 @@ class EventLvFragment : Fragment(), EventListView {
 
     @Subscribe()
     fun onDisplayDetail(ev: DisplayEventLvDetail) {
-        DetailEventLvActivity.newIntent(activity, ev.eventLv)
+        DetailEventLvActivity.newIntent(activity!!, ev.eventLv)
         Toast.makeText(activity, ev.eventLv.title, Toast.LENGTH_LONG).show()
     }
 
@@ -70,10 +70,9 @@ class EventLvFragment : Fragment(), EventListView {
         mPresenter.fetchComingEvents()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.fragment_eventlv_list, container, false)
-        mAdapter = EventLvListRecyclerViewAdapter(activity, emptyList())
+        mAdapter = EventLvListRecyclerViewAdapter(activity!!, emptyList())
         // Set the adapter
         if (view is RecyclerView) {
             val context = view.getContext()

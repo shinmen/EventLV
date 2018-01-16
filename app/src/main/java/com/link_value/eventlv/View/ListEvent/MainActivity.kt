@@ -11,6 +11,9 @@ import com.link_value.eventlv.R
 import com.link_value.eventlv.View.Create.NewEventLvActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import android.support.v4.app.ActivityOptionsCompat
+import android.view.View
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -28,7 +31,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         fab.setOnClickListener { view ->
             val i = NewEventLvActivity.newIntent(this)
-            startActivity(i)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view as View, resources.getString(R.string.transition_add_btn))
+            startActivity(i, options.toBundle())
         }
 
         val toggle = ActionBarDrawerToggle(

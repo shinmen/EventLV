@@ -24,10 +24,14 @@ import kotlin.coroutines.experimental.suspendCoroutine
 class AutocompleteAddress(private val userLocation: FetchUserLocation, private val googleApiClient: GoogleApiClient) {
 
     suspend fun getPredictions(query: String, location: Location?): ArrayList<AddressEventLV> {
+        val latLng: LatLng = if (location == null) {
+            FetchUserLocation.LV_LATLNG
+        } else {
+            LatLng(location.latitude, location.longitude)
+        }
         val addressList = ArrayList<AddressEventLV>()
-        val latLng = LatLng(location!!.latitude, location!!.longitude)
-        val southwest = SphericalUtil.computeOffset(latLng, 1500 * Math.sqrt(2.0), 225.toDouble())
-        val northeast = SphericalUtil.computeOffset(latLng, 1500 * Math.sqrt(2.0), 45.toDouble())
+        val southwest = SphericalUtil.computeOffset(latLng, 2500 * Math.sqrt(2.0), 225.toDouble())
+        val northeast = SphericalUtil.computeOffset(latLng, 2500 * Math.sqrt(2.0), 45.toDouble())
         val bounds = LatLngBounds(southwest, northeast)
         val job = launch {
             val result = Places.GeoDataApi.getAutocompletePredictions(googleApiClient, query, bounds, null)

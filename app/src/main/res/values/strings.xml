@@ -17,5 +17,6 @@
     <string name="title_activity_test">TestActivity</string>
 
     <string name="streetview_picture_base_url">https://maps.googleapis.com/maps/api/streetview?size=%1$s&amp;key=%2$s&amp;location=</string>
+    <string name="transition_add_btn">transition_add_btn</string>
 
 </resources>

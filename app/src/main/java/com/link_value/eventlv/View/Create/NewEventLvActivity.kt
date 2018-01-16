@@ -1,31 +1,23 @@
 package com.link_value.eventlv.View.Create
 
 import android.Manifest
-import android.app.DialogFragment
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
-import android.text.SpannableString
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
-import com.link_value.eventlv.Common.DatePickerDialogFragment
-import com.link_value.eventlv.Common.TimePickerDialogFragment
-import com.link_value.eventlv.Event.PostDateEvent
-import com.link_value.eventlv.Event.PostTimeEvent
+import com.link_value.eventlv.View.Common.DatePickerDialogFragment
+import com.link_value.eventlv.View.Common.TimePickerDialogFragment
+import com.link_value.eventlv.Model.Event.PostDateEvent
+import com.link_value.eventlv.Model.Event.PostTimeEvent
 import com.link_value.eventlv.Infrastructure.LocationApi.FetchUserLocation
-import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenterImpl
 import com.link_value.eventlv.R
 import kotlinx.android.synthetic.main.activity_new_event_lv.*
@@ -33,15 +25,13 @@ import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.util.*
 import org.greenrobot.eventbus.Subscribe
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
-import com.link_value.eventlv.Infrastructure.LocationApi.UnknownLocationException
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
-import kotlin.collections.ArrayList
-import kotlin.coroutines.experimental.suspendCoroutine
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 
 class NewEventLvActivity : AppCompatActivity(),
@@ -99,6 +89,7 @@ class NewEventLvActivity : AppCompatActivity(),
         setContentView(R.layout.activity_new_event_lv)
         EventBus.getDefault().register(this)
 
+
         askForUserLocation()
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val presenter = CreateEventPresenterImpl(this@NewEventLvActivity)
@@ -144,13 +135,16 @@ class NewEventLvActivity : AppCompatActivity(),
     }
 
     @Subscribe()
-    fun onDatePicked(date: PostDateEvent) {
-        input_date.text = date.toString()
+    fun onDatePicked(event: PostDateEvent) {
+        val df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
+
+        input_date.text = df.format(event.date)
     }
 
     @Subscribe()
-    fun onTimePicked(date: PostTimeEvent) {
-        input_time.text = date.toString()
+    fun onTimePicked(event: PostTimeEvent) {
+        val df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE)
+        input_time.text = df.format(event.date)
     }
 
     private fun askForUserLocation() {

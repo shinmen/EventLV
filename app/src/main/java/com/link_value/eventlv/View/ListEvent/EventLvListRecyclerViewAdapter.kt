@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.link_value.eventlv.Event.DisplayEventLvDetail
+import com.link_value.eventlv.Model.Event.DisplayEventLvDetail
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.R
 import com.squareup.picasso.Picasso

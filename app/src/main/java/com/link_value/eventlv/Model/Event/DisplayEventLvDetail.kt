@@ -1,4 +1,4 @@
-package com.link_value.eventlv.Event
+package com.link_value.eventlv.Model.Event
 
 import com.link_value.eventlv.Model.EventLV
 
