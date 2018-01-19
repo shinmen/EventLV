@@ -1,16 +1,10 @@
 package com.link_value.eventlv.View.ListEvent
 
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import com.link_value.eventlv.R
 import com.link_value.eventlv.View.Create.NewEventLvActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import android.support.v4.app.ActivityOptionsCompat
 import android.transition.Explode
 import android.view.View

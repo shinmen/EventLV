@@ -18,5 +18,5 @@ interface HttpEventLvInterface {
     fun getComingEvents(): Call<List<EventLV>>
 
     @POST("eventlv/create")
-    fun createEvent(@Body event:EventLV): Call<EventLV>
+    fun saveEvent(@Body event:EventLV): Call<EventLV>
 }

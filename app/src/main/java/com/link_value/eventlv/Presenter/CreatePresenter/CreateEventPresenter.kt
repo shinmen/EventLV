@@ -8,4 +8,6 @@ import com.link_value.eventlv.Model.EventLV
  */
 interface CreateEventPresenter {
     fun persistEventLv(event: EventLV)
+    fun onSuccessEventSaved()
+    fun onErrorEventSaved(error: String?)
 }

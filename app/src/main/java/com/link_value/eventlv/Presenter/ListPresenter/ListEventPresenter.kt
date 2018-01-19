@@ -9,5 +9,4 @@ interface ListEventPresenter {
     fun fetchComingEvents():List<EventLV>
     fun onSuccessFetchEvents(events: List<EventLV>)
     fun onErrorFetchEvents(error: String?)
-
 }

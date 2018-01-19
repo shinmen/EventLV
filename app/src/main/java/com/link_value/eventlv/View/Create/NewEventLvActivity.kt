@@ -35,7 +35,9 @@ import org.greenrobot.eventbus.Subscribe
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
+import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.R.id.toolbar
+import com.link_value.eventlv.Repository.Create.NewEventRepositoryImpl
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.text.DateFormat
@@ -60,7 +62,8 @@ class NewEventLvActivity : AppCompatActivity(),
 
         askForUserLocation()
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val presenter = CreateEventPresenterImpl(this@NewEventLvActivity)
+        val repo = NewEventRepositoryImpl(HttpClient())
+        val presenter = CreateEventPresenterImpl(this@NewEventLvActivity, repo)
 
         event_date.onClick {
             val datePickerFragment = DatePickerDialogFragment.newInstance(Date())

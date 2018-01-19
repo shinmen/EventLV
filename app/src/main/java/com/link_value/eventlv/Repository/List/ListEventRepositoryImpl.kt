@@ -11,7 +11,10 @@ import ru.gildor.coroutines.retrofit.await
 /**
  * Created by julienb on 08/12/17.
  */
-class ListEventRepositoryImpl(private val httpClient: HttpClient, private val streetViewRepo: StreetViewRepository): ListEventRepository {
+class ListEventRepositoryImpl(
+        private val httpClient: HttpClient,
+        private val streetViewRepo: StreetViewRepository
+    ): ListEventRepository {
 
     override fun queryComingEvents(listener: ListEventPresenter) {
         val api = httpClient.retrofit.baseUrl(HttpEventLvInterface.BASE_URL).build()
@@ -31,7 +34,7 @@ class ListEventRepositoryImpl(private val httpClient: HttpClient, private val st
         }
     }
 
-    suspend private fun requestComingEvents(repo: HttpEventLvInterface): List<EventLV> {
+    private suspend fun requestComingEvents(repo: HttpEventLvInterface): List<EventLV> {
         return repo.getComingEvents().await()
     }
 }

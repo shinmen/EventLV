@@ -8,7 +8,10 @@ import com.link_value.eventlv.View.ListEvent.EventListView
 /**
  * Created by julienb on 29/11/17.
  */
-class ListEventPresenterImpl(private val mEventListView: EventListView, private val mListRepo: ListEventRepository): ListEventPresenter {
+class ListEventPresenterImpl(
+        private val mEventListView: EventListView,
+        private val mListRepo: ListEventRepository
+    ): ListEventPresenter {
 
     override fun onSuccessFetchEvents(events: List<EventLV>) {
         mEventListView.onEventsFetched(events)

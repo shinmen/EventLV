@@ -22,18 +22,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
 /**
- * A fragment representing a list of Items.
- *
- */
-/**
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
 class EventLvFragment : Fragment(), EventListView {
+
     private lateinit var mAdapter:EventLvListRecyclerViewAdapter
     private lateinit var mPresenter: ListEventPresenterImpl
     private lateinit var tabSelected: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +81,6 @@ class EventLvFragment : Fragment(), EventListView {
             view.adapter = mAdapter
         }
 
-
         return view
     }
 
@@ -98,7 +93,6 @@ class EventLvFragment : Fragment(), EventListView {
     }
 
     companion object {
-
         fun newInstance(): EventLvFragment {
             val fragment = EventLvFragment()
             val args = Bundle()
