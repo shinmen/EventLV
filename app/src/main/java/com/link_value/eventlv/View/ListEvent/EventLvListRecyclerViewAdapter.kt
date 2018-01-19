@@ -17,7 +17,7 @@ import java.text.DateFormat
 class EventLvListRecyclerViewAdapter(private val context: Context, private var mValues: List<EventLV>) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_eventlv, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_eventlv, parent, false)
         return ViewHolder(view)
     }
 

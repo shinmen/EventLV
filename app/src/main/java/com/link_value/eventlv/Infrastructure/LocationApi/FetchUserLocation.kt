@@ -5,7 +5,9 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.suspendCoroutine
 
 
@@ -22,17 +24,11 @@ class FetchUserLocation(private val locationManager: LocationManager) {
     suspend fun fetchLocation(): Location? {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0.toFloat(), object :LocationListener{
-                override fun onLocationChanged(location: Location?) {
-                    //launch(UI) {  ch.send(location)}
-                }
+                override fun onLocationChanged(location: Location?) {}
                 override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
                 override fun onProviderEnabled(provider: String?) {}
                 override fun onProviderDisabled(provider: String?) {}
             })
-            /*if (!ch.isEmpty) {
-                location = ch.receive()
-            }*/
-
 
             return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         } catch (ex: SecurityException) {

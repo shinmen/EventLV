@@ -8,6 +8,4 @@
     tools:context="com.link_value.eventlv.View.ListEvent.MainActivity"
     tools:showIn="@layout/app_bar_main"
     android:id="@+id/list_container">
-
-
 </android.support.constraint.ConstraintLayout>

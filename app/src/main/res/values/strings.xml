@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EventByLV</string>
+    <string name="app_name">Event By LV</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -17,6 +17,10 @@
     <string name="title_activity_test">TestActivity</string>
 
     <string name="streetview_picture_base_url">https://maps.googleapis.com/maps/api/streetview?size=%1$s&amp;key=%2$s&amp;location=</string>
+    <string name="duration_input_value">Fin prévue %1$dh après</string>
     <string name="transition_add_btn">transition_add_btn</string>
+    
+    <string name="archived_status_list_event">Event archivés</string>
+    <string name="coming_status_list_event">Event à venir</string>
 
 </resources>

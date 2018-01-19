@@ -7,10 +7,17 @@ import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.support.transition.*
+import android.support.transition.Fade.IN
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.Explode
+import android.transition.Slide
+import android.transition.Transition
+import android.view.Gravity
+import android.widget.SeekBar
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.link_value.eventlv.View.Common.DatePickerDialogFragment
@@ -28,11 +35,10 @@ import org.greenrobot.eventbus.Subscribe
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
+import com.link_value.eventlv.R.id.toolbar
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-
 
 class NewEventLvActivity : AppCompatActivity(),
         CreateEventView,
@@ -40,55 +46,17 @@ class NewEventLvActivity : AppCompatActivity(),
         GoogleApiClient.OnConnectionFailedListener
 {
     private lateinit var adapter: AutoCompleteAddressAdapter
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-        Toast.makeText(this@NewEventLvActivity, "impossible de se connecter", Toast.LENGTH_SHORT).show()
-    }
-
     private lateinit var googleApiClient: GoogleApiClient
-
-    override fun onConnected(p0: Bundle?) {
-        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val autoComplete = AutocompleteAddress(FetchUserLocation(locationManager), googleApiClient)
-        adapter = AutoCompleteAddressAdapter(this@NewEventLvActivity, android.R.layout.simple_list_item_1)
-        input_address.setAdapter(adapter)
-        input_address.threshold = 3
-        input_address.addTextChangedListener(object: TextWatcher{
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (query.toString().length >= 4) {
-                    val userLocation = FetchUserLocation(locationManager)
-
-                    launch(UI) {
-                        val location = userLocation.fetchLocation()
-                        adapter.update(autoComplete.getPredictions(query.toString(), location))
-                    }
-                }
-            }
-        })
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-        Toast.makeText(this@NewEventLvActivity, "impossible de se connecter", Toast.LENGTH_SHORT).show()
-
-    }
-
-    override fun onEventPersisted() {
-    }
-
-    override fun onError(message: String?) {
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_new_event_lv)
         EventBus.getDefault().register(this)
-
+        window.allowEnterTransitionOverlap = true
+        val explode = Explode()
+        explode.excludeTarget(toolbar, true)
+        window.enterTransition = explode
 
         askForUserLocation()
         val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -107,14 +75,9 @@ class NewEventLvActivity : AppCompatActivity(),
         googleApiClient = GoogleApiClient.Builder(this@NewEventLvActivity)
                 .enableAutoManage(this /* FragmentActivity */,
                         this /* OnConnectionFailedListener */)
-
                 .addApi(Places.GEO_DATA_API)
-//                .addApi(Places.PLACE_DETECTION_API)
-//                .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
-                //.addOnConnectionFailedListener(this)
                 .build()
-        //googleApiClient.disconnect()
 
     }
 
@@ -137,7 +100,6 @@ class NewEventLvActivity : AppCompatActivity(),
     @Subscribe()
     fun onDatePicked(event: PostDateEvent) {
         val df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE)
-
         input_date.text = df.format(event.date)
     }
 
@@ -145,6 +107,59 @@ class NewEventLvActivity : AppCompatActivity(),
     fun onTimePicked(event: PostTimeEvent) {
         val df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE)
         input_time.text = df.format(event.date)
+    }
+
+
+    override fun onEventPersisted() {
+    }
+
+    override fun onError(message: String?) {
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+        Toast.makeText(this@NewEventLvActivity, "impossible de se connecter", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onConnected(p0: Bundle?) {
+        val locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val autoComplete = AutocompleteAddress(FetchUserLocation(locationManager), googleApiClient)
+        adapter = AutoCompleteAddressAdapter(this@NewEventLvActivity, android.R.layout.simple_list_item_1)
+        event_duration.text = resources.getString(R.string.duration_input_value, 1)
+        input_address.setAdapter(adapter)
+        input_address.threshold = 3
+        input_address.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (query.toString().length >= 4) {
+                    val userLocation = FetchUserLocation(locationManager)
+
+                    launch(UI) {
+                        val location = userLocation.fetchLocation()
+                        adapter.update(autoComplete.getPredictions(query.toString(), location))
+                    }
+                }
+            }
+        })
+        input_duration.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
+                event_duration.text = resources.getString(R.string.duration_input_value, progress)
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+            }
+        })
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+        Toast.makeText(this@NewEventLvActivity, "impossible de se connecter", Toast.LENGTH_SHORT).show()
     }
 
     private fun askForUserLocation() {
@@ -189,9 +204,7 @@ class NewEventLvActivity : AppCompatActivity(),
     companion object {
         val PERMISSION_REQUEST_LOCATION = 0
         fun newIntent(packageContext: Context): Intent {
-            val intent = Intent(packageContext, NewEventLvActivity::class.java)
-
-            return intent
+            return Intent(packageContext, NewEventLvActivity::class.java)
         }
     }
 }
