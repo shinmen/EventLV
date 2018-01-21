@@ -14,7 +14,10 @@ import com.squareup.picasso.Picasso
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
 
-class EventLvListRecyclerViewAdapter(private val context: Context, private var mValues: List<EventLV>) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
+class EventLvListRecyclerViewAdapter(
+        private val context: Context,
+        private var mValues: List<EventLV>
+    ) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_eventlv, parent, false)
@@ -56,7 +59,7 @@ class EventLvListRecyclerViewAdapter(private val context: Context, private var m
         val mStartTimeView: TextView = mView.findViewById(R.id.start_time)
 
         override fun toString(): String {
-            return super.toString() + " '" + mTitleView.getText() + "'"
+            return super.toString() + " '" + mTitleView.text + "'"
         }
     }
 }

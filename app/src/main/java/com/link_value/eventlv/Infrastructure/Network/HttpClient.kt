@@ -25,6 +25,8 @@ class HttpClient {
         httpClient.addInterceptor(logging)
 
         val gson = GsonBuilder().setDateFormat("yyyy-M-dd hh:mm:ss").create()
-        retrofit = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create(gson)).client(httpClient.build())
+        retrofit = Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(httpClient.build())
     }
 }

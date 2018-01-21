@@ -16,41 +16,42 @@ class EventLV : Parcelable {
     @SerializedName("title")
     @Expose
     var title: String
-        protected set
 
     @SerializedName("startedAt")
     @Expose
     var startedAt: Date? = null
-        protected set
 
     @SerializedName("duration")
     @Expose
     var duration: Int? = null
-        protected set
 
     @SerializedName("location_name")
     @Expose
     var locationName: String
-        protected set
 
     @SerializedName("address")
     @Expose
     var address: String
-        protected set
 
     @SerializedName("creator")
     @Expose
     var initiator: Partner
-        protected set
 
     @SerializedName("participants")
     @Expose
     var participants: List<Partner> = ArrayList()
-        protected set
 
     var locationStreetPictureUrl: String? = null
 
-    constructor(title: String, startedAt: Date, duration: Int?, locationName: String, address: String, initiator: Partner, participants: List<Partner>) {
+    constructor(
+            title: String,
+            startedAt: Date,
+            duration: Int?,
+            locationName: String,
+            address: String,
+            initiator: Partner,
+            participants: List<Partner>
+    ) {
         this.title = title
         this.startedAt = startedAt
         this.duration = duration

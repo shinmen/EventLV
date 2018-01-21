@@ -21,7 +21,7 @@ import kotlin.coroutines.experimental.suspendCoroutine
 /**
  * Created by julo on 30/12/17.
  */
-class AutocompleteAddress(private val userLocation: FetchUserLocation, private val googleApiClient: GoogleApiClient) {
+class AutocompleteAddress(private val googleApiClient: GoogleApiClient) {
 
     suspend fun getPredictions(query: String, location: Location?): ArrayList<AddressEventLV> {
         val latLng: LatLng = if (location == null) {

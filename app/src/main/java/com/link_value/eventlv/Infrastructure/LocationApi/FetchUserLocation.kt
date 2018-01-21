@@ -21,7 +21,7 @@ class FetchUserLocation(private val locationManager: LocationManager) {
         val LV_LATLNG = LatLng(48.883003, 2.316180)
     }
 
-    suspend fun fetchLocation(): Location? {
+    fun fetchLocation(): Location? {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0.toFloat(), object :LocationListener{
                 override fun onLocationChanged(location: Location?) {}

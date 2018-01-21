@@ -16,16 +16,12 @@ class Partner : Parcelable {
     @SerializedName("username")
     @Expose
     var username: String
-        protected set
 
     @SerializedName("avatarUrl")
     @Expose
     var avatarUrl: String
-        protected set
 
     var avatar: Bitmap?
-        protected set
-
 
     constructor(username: String, avatarUrl: String) {
         this.username = username
@@ -63,6 +59,10 @@ class Partner : Parcelable {
             override fun newArray(size: Int): Array<Partner?> {
                 return arrayOfNulls(size)
             }
+        }
+
+        fun mockCurrentUser(): Partner{
+            return Partner("joker", "http://www.free-emoticons.com/files/avatar-emoticons/2397.png")
         }
     }
 }

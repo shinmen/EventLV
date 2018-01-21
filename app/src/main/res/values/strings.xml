@@ -22,5 +22,6 @@
     
     <string name="archived_status_list_event">Event archivés</string>
     <string name="coming_status_list_event">Event à venir</string>
+    <string name="label_location_name">Lieu de RDV</string>
 
 </resources>

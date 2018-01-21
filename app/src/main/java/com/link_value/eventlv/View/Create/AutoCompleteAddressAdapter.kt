@@ -14,12 +14,9 @@ import java.util.*
 /**
  * Created by julo on 30/12/17.
  */
-class AutoCompleteAddressAdapter(context: Context, resource: Int) : ArrayAdapter<AddressEventLV>(context, resource),
-        Filterable
+class AutoCompleteAddressAdapter(context: Context, resource: Int) : ArrayAdapter<AddressEventLV>(context, resource)
 {
-
     private var addresses = ArrayList<AddressEventLV>()
-
 
     fun update(list: ArrayList<AddressEventLV>) {
         addresses = list
@@ -31,6 +28,6 @@ class AutoCompleteAddressAdapter(context: Context, resource: Int) : ArrayAdapter
     }
 
     override fun getItem(position: Int): AddressEventLV {
-        return  addresses[position]
+        return addresses[position]
     }
 }

@@ -6,6 +6,7 @@ import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import ru.gildor.coroutines.retrofit.await
 
 /**
  * Created by julienb on 19/01/18.
@@ -18,8 +19,7 @@ class NewEventRepositoryImpl(private val httpClient: HttpClient): NewEventReposi
 
         launch(UI) {
             try {
-                repoEvents.saveEvent(event)
-
+                repoEvents.saveEvent(event).await()
                 listener.onSuccessEventSaved()
             } catch (ex: Exception) {
                 listener.onErrorEventSaved(ex.message)

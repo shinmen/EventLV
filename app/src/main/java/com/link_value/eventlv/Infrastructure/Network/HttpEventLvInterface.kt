@@ -11,7 +11,7 @@ import retrofit2.http.POST
  */
 interface HttpEventLvInterface {
     companion object {
-        val BASE_URL = "http://api.jbouffard.fr"
+        const val BASE_URL = "http://api.jbouffard.fr"
     }
 
     @GET("eventlv/list")

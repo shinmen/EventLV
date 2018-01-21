@@ -5,6 +5,6 @@ package com.link_value.eventlv.Infrastructure.Network
  */
 interface HttpGoogleMapInterface {
     companion object {
-        val BASE_URL = "https://maps.googleapis.com/maps/api/"
+        const val BASE_URL = "https://maps.googleapis.com/maps/api/"
     }
 }
