@@ -12,6 +12,8 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Explode
+import android.view.View
+import android.widget.AdapterView
 import android.widget.SeekBar
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
@@ -29,8 +31,11 @@ import java.util.*
 import org.greenrobot.eventbus.Subscribe
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.PendingResult
+import com.google.android.gms.location.places.PlaceBuffer
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
+import com.link_value.eventlv.Model.AddressEventLV
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
@@ -40,6 +45,7 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.text.DateFormat
 import java.util.Calendar.*
+import kotlin.coroutines.experimental.suspendCoroutine
 
 class NewEventLvActivity : AppCompatActivity(),
         CreateEventView,
@@ -95,7 +101,6 @@ class NewEventLvActivity : AppCompatActivity(),
 
         propose_event.onClick(UI) {
             val loggedInUser = Partner.mockCurrentUser()
-            mAddress = input_address.text.toString()
             mEventName = input_name.text.toString()
             mLocationName = input_location_name.text.toString()
             val proposedEvent = EventLV(
@@ -187,11 +192,20 @@ class NewEventLvActivity : AppCompatActivity(),
 
                     launch(UI) {
                         val location = userLocation.fetchLocation()
-                        adapter.update(autoComplete.getPredictions(query.toString(), location))
+                        val addressList = autoComplete.getPredictions(query.toString(), location)
+                        adapter.update(addressList)
                     }
                 }
             }
         })
+
+        input_address.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val address = adapter.getItem(position)
+            input_location_name.text = Editable.Factory.getInstance().newEditable(address.name)
+            launch(UI) {
+                mAddress = autoComplete.getPreciseAddress(address)
+            }
+        }
     }
 
     override fun onConnectionSuspended(p0: Int) {
@@ -248,5 +262,9 @@ class NewEventLvActivity : AppCompatActivity(),
         fun newIntent(packageContext: Context): Intent {
             return Intent(packageContext, NewEventLvActivity::class.java)
         }
+    }
+
+    private suspend fun PendingResult<PlaceBuffer>.awaitPlace(): PlaceBuffer = suspendCoroutine {
+        cont-> setResultCallback { places -> cont.resume(places) }
     }
 }
