@@ -39,6 +39,7 @@ class EventLvListRecyclerViewAdapter(
                 .into(holder.mLocationPictureView)
         holder.mLocationName.text = event.locationName
         holder.mTitleView.text = event.title
+        holder.mCategoryView.text = event.category
         val startedAt = event.startedAt
         val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startedAt)
         holder.mStartTimeView.text = date
@@ -54,6 +55,7 @@ class EventLvListRecyclerViewAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mLocationPictureView: ImageView = mView.findViewById(R.id.location_img)
+        val mCategoryView: TextView = mView.findViewById(R.id.category)
         val mLocationName: TextView = mView.findViewById(R.id.location_name)
         val mTitleView: TextView = mView.findViewById(R.id.title)
         val mStartTimeView: TextView = mView.findViewById(R.id.start_time)

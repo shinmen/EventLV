@@ -51,14 +51,9 @@ class Partner : Parcelable {
 
     companion object {
 
-        val CREATOR: Parcelable.Creator<Partner> = object : Parcelable.Creator<Partner> {
-            override fun createFromParcel(`in`: Parcel): Partner {
-                return Partner(`in`)
-            }
-
-            override fun newArray(size: Int): Array<Partner?> {
-                return arrayOfNulls(size)
-            }
+        @JvmField val CREATOR: Parcelable.Creator<Partner> = object : Parcelable.Creator<Partner> {
+            override fun createFromParcel(`in`: Parcel) = Partner(`in`)
+            override fun newArray(size: Int) = arrayOfNulls<Partner>(size)
         }
 
         fun mockCurrentUser(): Partner{

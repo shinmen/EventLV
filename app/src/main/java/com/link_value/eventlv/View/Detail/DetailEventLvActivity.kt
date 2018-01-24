@@ -13,6 +13,14 @@ class DetailEventLvActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_event_lv)
+        val bundle = intent.extras
+        val event = bundle.getParcelable(EventLV.PARCEL_NAME) as EventLV
+        val detailEventValueFragment = SubscribeEventFragment.newInstance(event)
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.subscribe_event_container, detailEventValueFragment)
+                .commit()
+
     }
 
     companion object {

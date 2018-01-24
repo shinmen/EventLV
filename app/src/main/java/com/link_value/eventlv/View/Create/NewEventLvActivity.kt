@@ -105,6 +105,7 @@ class NewEventLvActivity : AppCompatActivity(),
             mLocationName = input_location_name.text.toString()
             val proposedEvent = EventLV(
                     mEventName!!,
+                    "contrib",
                     mStartedDate.time,
                     mDuration,
                     mLocationName!!,

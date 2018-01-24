@@ -17,6 +17,10 @@ class EventLV : Parcelable {
     @Expose
     var title: String
 
+    @SerializedName("category")
+    @Expose
+    var category: String
+
     @SerializedName("startedAt")
     @Expose
     var startedAt: Date? = null
@@ -45,6 +49,7 @@ class EventLV : Parcelable {
 
     constructor(
             title: String,
+            category: String,
             startedAt: Date,
             duration: Int?,
             locationName: String,
@@ -53,6 +58,7 @@ class EventLV : Parcelable {
             participants: List<Partner>
     ) {
         this.title = title
+        this.category = category
         this.startedAt = startedAt
         this.duration = duration
         this.locationName = locationName
@@ -63,6 +69,7 @@ class EventLV : Parcelable {
 
     private constructor(`in`: Parcel) {
         title = `in`.readString()
+        category = `in`.readString()
         locationName = `in`.readString()
         address = `in`.readString()
         locationStreetPictureUrl = `in`.readString()
@@ -78,6 +85,7 @@ class EventLV : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(title)
+        dest.writeString(category)
         dest.writeString(locationName)
         dest.writeString(address)
         dest.writeString(locationStreetPictureUrl)
@@ -92,14 +100,9 @@ class EventLV : Parcelable {
 
         var PARCEL_NAME = "event_lv_parcel"
 
-        val CREATOR: Parcelable.Creator<EventLV> = object : Parcelable.Creator<EventLV> {
-            override fun createFromParcel(`in`: Parcel): EventLV {
-                return EventLV(`in`)
-            }
-
-            override fun newArray(size: Int): Array<EventLV?> {
-                return arrayOfNulls(size)
-            }
+        @JvmField val CREATOR: Parcelable.Creator<EventLV> = object : Parcelable.Creator<EventLV> {
+            override fun createFromParcel(`in`: Parcel) = EventLV(`in`)
+            override fun newArray(size: Int) = arrayOfNulls<EventLV>(size)
         }
     }
 }

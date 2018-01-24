@@ -14,7 +14,7 @@ class HttpClient {
     val retrofit: Retrofit.Builder
 
     companion object {
-        val TAG = HttpClient.javaClass.simpleName
+        val TAG = HttpClient::class.java.simpleName
     }
 
     init {
