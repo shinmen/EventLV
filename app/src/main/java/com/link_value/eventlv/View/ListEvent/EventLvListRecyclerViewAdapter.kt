@@ -35,11 +35,11 @@ class EventLvListRecyclerViewAdapter(
                 .load(event.locationStreetPictureUrl)
                 .fit()
                 .centerCrop()
-                .placeholder(R.drawable.ic_menu_gallery)
+                .placeholder(android.R.drawable.ic_menu_gallery)
                 .into(holder.mLocationPictureView)
         holder.mLocationName.text = event.locationName
         holder.mTitleView.text = event.title
-        holder.mCategoryView.text = event.category
+        holder.mCategoryView.text = event.category.toString()
         val startedAt = event.startedAt
         val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startedAt)
         holder.mStartTimeView.text = date

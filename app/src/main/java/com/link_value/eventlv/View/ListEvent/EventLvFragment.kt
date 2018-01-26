@@ -2,7 +2,6 @@ package com.link_value.eventlv.View.ListEvent
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -25,17 +24,15 @@ import org.greenrobot.eventbus.Subscribe
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class EventLvFragment : Fragment(), EventListView {
+class EventLvFragment : Fragment(), ListEventView {
 
     private lateinit var mAdapter:EventLvListRecyclerViewAdapter
-    private lateinit var mPresenter: ListEventPresenterImpl
-    private lateinit var tabSelected: String
+    lateinit var mPresenter: ListEventPresenterImpl
+    private var tabSelected: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-        initPresenter()
-        tabSelected = resources.getString(R.string.coming_status_list_event)
     }
 
     override fun onDestroy() {
@@ -54,21 +51,8 @@ class EventLvFragment : Fragment(), EventListView {
     fun onTabSelected(ev: TabSelectedEvent) {
         if (ev.value != tabSelected) {
             tabSelected = ev.value
-            mPresenter.fetchComingEvents()
+            mPresenter.refreshWithCategory(ev.value)
         }
-    }
-
-    private fun initPresenter() {
-        val streetviewBaseUrl = resources.getString(
-                R.string.streetview_picture_base_url,
-                "400x400",
-                resources.getString(R.string.google_streetview_api_key)
-        )
-        val streetviewRepo = StreetViewRepositoryImpl(streetviewBaseUrl)
-        val repo = ListEventRepositoryImpl(HttpClient(), streetviewRepo)
-        mPresenter = ListEventPresenterImpl(this, repo)
-
-        mPresenter.fetchComingEvents()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

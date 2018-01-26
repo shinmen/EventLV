@@ -24,7 +24,7 @@ class FetchUserLocation(private val locationManager: LocationManager) {
     fun fetchLocation(): Location? {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0.toFloat(), object :LocationListener{
-                override fun onLocationChanged(location: Location?) {}
+                override fun onLocationChanged(location: Location?) {locationManager.removeUpdates(this)}
                 override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
                 override fun onProviderEnabled(provider: String?) {}
                 override fun onProviderDisabled(provider: String?) {}
@@ -33,28 +33,6 @@ class FetchUserLocation(private val locationManager: LocationManager) {
             return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         } catch (ex: SecurityException) {
             throw ex
-        }
-    }
-
-    private suspend fun LocationManager.await(locationProvider: String): Location? = suspendCoroutine { cont ->
-        try {
-            requestLocationUpdates(locationProvider, 0, 0.toFloat(), object:LocationListener{
-                override fun onLocationChanged(location: Location?) {
-                    cont.resume(location)
-                }
-
-                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                }
-
-                override fun onProviderEnabled(provider: String?) {
-                }
-
-                override fun onProviderDisabled(provider: String?) {
-                }
-            })
-
-        } catch (ex: SecurityException) {
-            cont.resumeWithException(ex)
         }
     }
 }

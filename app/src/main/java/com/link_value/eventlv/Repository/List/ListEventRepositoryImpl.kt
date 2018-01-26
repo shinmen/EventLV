@@ -4,6 +4,7 @@ import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenter
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Infrastructure.Network.HttpEventLvInterface
+import com.link_value.eventlv.View.ListEvent.ListEventView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import ru.gildor.coroutines.retrofit.await
@@ -16,25 +17,39 @@ class ListEventRepositoryImpl(
         private val streetViewRepo: StreetViewRepository
     ): ListEventRepository {
 
-    override fun queryComingEvents(listener: ListEventPresenter) {
+    override fun queryEventsByCategory(category:String, listener: ListEventView) {
         val api = httpClient.retrofit.baseUrl(HttpEventLvInterface.BASE_URL).build()
         val repoEvents = api.create(HttpEventLvInterface::class.java)
 
         launch(UI) {
             try {
-                val list = requestComingEvents(repoEvents)
+                val list = repoEvents.getFilteredEvents(category).await()
                 list.forEach({
                     it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
                 })
 
-                listener.onSuccessFetchEvents(list)
+                listener.onEventsFetched(list)
             } catch (ex: Exception) {
-                listener.onErrorFetchEvents(ex.message)
+                listener.onErrorEventsFetch(ex.message)
             }
         }
     }
 
-    private suspend fun requestComingEvents(repo: HttpEventLvInterface): List<EventLV> {
-        return repo.getComingEvents().await()
+    override fun queryComingEvents(listener: ListEventView) {
+        val api = httpClient.retrofit.baseUrl(HttpEventLvInterface.BASE_URL).build()
+        val repoEvents = api.create(HttpEventLvInterface::class.java)
+
+        launch(UI) {
+            try {
+                val list = repoEvents.getComingEvents().await()
+                list.forEach({
+                    it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
+                })
+
+                listener.onEventsFetched(list)
+            } catch (ex: Exception) {
+                listener.onErrorEventsFetch(ex.message)
+            }
+        }
     }
 }

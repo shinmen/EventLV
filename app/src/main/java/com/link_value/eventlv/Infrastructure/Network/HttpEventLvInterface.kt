@@ -1,10 +1,9 @@
 package com.link_value.eventlv.Infrastructure.Network
 
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * Created by julienb on 01/12/17.
@@ -17,6 +16,12 @@ interface HttpEventLvInterface {
     @GET("eventlv/list")
     fun getComingEvents(): Call<List<EventLV>>
 
+    @GET("eventlv/list/{category}")
+    fun getFilteredEvents(@Path("category") category: String): Call<List<EventLV>>
+
     @POST("eventlv/create")
     fun saveEvent(@Body event:EventLV): Call<EventLV>
+
+    @GET("eventlv/category/list")
+    fun getCategories(): Call<List<Category>>
 }

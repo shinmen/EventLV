@@ -6,15 +6,32 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.Event.TabSelectedEvent
+import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
 import kotlinx.android.synthetic.main.fragment_liststatustab.*
+import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by julienb on 19/01/18.
  */
-class ListStatusTabFragment: Fragment() {
+class ListCategoryTabFragment : Fragment(),
+        ListCategoryView
+{
+    lateinit var mPresenter: ListEventPresenterImpl
+
+    override fun onCategoriesFetched(categories: List<Category>) {
+       categories.forEach {
+           tab_list.addTab(tab_list.newTab().setText(it.name))
+       }
+    }
+
+    override fun onErrorCategoryFetch(error: String?) {
+        Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +64,8 @@ class ListStatusTabFragment: Fragment() {
 
     companion object {
 
-        fun newInstance(): ListStatusTabFragment {
-            val fragment = ListStatusTabFragment()
+        fun newInstance(): ListCategoryTabFragment {
+            val fragment = ListCategoryTabFragment()
             val args = Bundle()
             fragment.arguments = args
 

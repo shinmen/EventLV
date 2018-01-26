@@ -19,7 +19,7 @@ class EventLV : Parcelable {
 
     @SerializedName("category")
     @Expose
-    var category: String
+    var category: Category
 
     @SerializedName("startedAt")
     @Expose
@@ -49,7 +49,7 @@ class EventLV : Parcelable {
 
     constructor(
             title: String,
-            category: String,
+            category: Category,
             startedAt: Date,
             duration: Int?,
             locationName: String,
@@ -69,7 +69,7 @@ class EventLV : Parcelable {
 
     private constructor(`in`: Parcel) {
         title = `in`.readString()
-        category = `in`.readString()
+        category = `in`.readParcelable(Category::class.java.classLoader)
         locationName = `in`.readString()
         address = `in`.readString()
         locationStreetPictureUrl = `in`.readString()
@@ -85,7 +85,7 @@ class EventLV : Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(title)
-        dest.writeString(category)
+        dest.writeParcelable(category, flags)
         dest.writeString(locationName)
         dest.writeString(address)
         dest.writeString(locationStreetPictureUrl)

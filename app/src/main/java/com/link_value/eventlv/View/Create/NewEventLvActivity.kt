@@ -36,6 +36,7 @@ import com.google.android.gms.location.places.PlaceBuffer
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Model.AddressEventLV
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
@@ -105,7 +106,7 @@ class NewEventLvActivity : AppCompatActivity(),
             mLocationName = input_location_name.text.toString()
             val proposedEvent = EventLV(
                     mEventName!!,
-                    "contrib",
+                    Category("contrib"),
                     mStartedDate.time,
                     mDuration,
                     mLocationName!!,

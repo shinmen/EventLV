@@ -13,13 +13,13 @@ import ru.gildor.coroutines.retrofit.await
  */
 class NewEventRepositoryImpl(private val httpClient: HttpClient): NewEventRepository {
 
-    override fun saveEvent(event: EventLV,listener: CreateEventPresenter) {
+    override fun saveEvent(eventLv: EventLV,listener: CreateEventPresenter) {
         val api = httpClient.retrofit.baseUrl(HttpEventLvInterface.BASE_URL).build()
         val repoEvents = api.create(HttpEventLvInterface::class.java)
 
         launch(UI) {
             try {
-                repoEvents.saveEvent(event).await()
+                repoEvents.saveEvent(eventLv).await()
                 listener.onSuccessEventSaved()
             } catch (ex: Exception) {
                 listener.onErrorEventSaved(ex.message)
