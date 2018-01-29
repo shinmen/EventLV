@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import com.link_value.eventlv.Model.EventLV
+import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenter
+import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenterImpl
 import com.link_value.eventlv.R
 
-class DetailEventLvActivity : AppCompatActivity() {
-
+class DetailEventLvActivity : AppCompatActivity()
+{
+    private lateinit var mPresenter: DetailPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_event_lv)
@@ -20,7 +23,7 @@ class DetailEventLvActivity : AppCompatActivity() {
                 .beginTransaction()
                 .add(R.id.subscribe_event_container, detailEventValueFragment)
                 .commit()
-
+        mPresenter = DetailPresenterImpl(detailEventValueFragment)
     }
 
     companion object {

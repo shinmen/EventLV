@@ -32,6 +32,7 @@ class EventLvFragment : Fragment(), ListEventView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retainInstance = true
         EventBus.getDefault().register(this)
     }
 
@@ -49,9 +50,13 @@ class EventLvFragment : Fragment(), ListEventView {
 
     @Subscribe
     fun onTabSelected(ev: TabSelectedEvent) {
-        if (ev.value != tabSelected) {
-            tabSelected = ev.value
-            mPresenter.refreshWithCategory(ev.value)
+        if (ev.category.name != tabSelected) {
+            tabSelected = ev.category.name
+            if (tabSelected == resources.getString(R.string.all_types)) {
+                mPresenter.fetchAll()
+            } else {
+                mPresenter.refreshWithCategory(ev.category.slug)
+            }
         }
     }
 

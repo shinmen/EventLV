@@ -6,4 +6,5 @@ package com.link_value.eventlv.Presenter.ListPresenter
 interface ListEventPresenter {
     fun start()
     fun refreshWithCategory(category: String)
+    fun fetchAll()
 }

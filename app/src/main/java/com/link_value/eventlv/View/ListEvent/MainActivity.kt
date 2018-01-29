@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) {
             mListEventFragment = EventLvFragment.newInstance()
             mListCategoryTabFragment = ListCategoryTabFragment.newInstance()
             supportFragmentManager
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                     .add(android.R.id.content, mListCategoryTabFragment)
                     .add(R.id.list_container, mListEventFragment)
                     .commit()
-        }
+
 
         onClickGoToNewEvent()
         initPresenter()

@@ -18,7 +18,7 @@
         <android.support.design.widget.TabItem
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="@string/coming_status_list_event"/>
+            android:text="@string/all_types"/>
 
     </android.support.design.widget.TabLayout>
 </android.support.design.widget.CoordinatorLayout>

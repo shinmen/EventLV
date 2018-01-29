@@ -2,6 +2,7 @@ package com.link_value.eventlv.Repository.List
 
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Infrastructure.Network.HttpEventLvInterface
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.View.ListEvent.ListCategoryView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -18,8 +19,11 @@ class ListCategoryRepositoryImpl(private val httpClient: HttpClient): ListCatego
         launch(UI) {
             try {
                 val list = repoCategories.getCategories().await()
-
-                listener.onCategoriesFetched(list)
+                val map = HashMap<String, Category>()
+                list.forEach {
+                    map[it.name] = it
+                }
+                listener.onCategoriesFetched(map)
             } catch (ex: Exception) {
                 listener.onErrorCategoryFetch(ex.message)
             }

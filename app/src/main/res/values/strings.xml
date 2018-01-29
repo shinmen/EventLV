@@ -20,8 +20,7 @@
     <string name="duration_input_value">Fin prévue %1$dh après</string>
     <string name="transition_add_btn">transition_add_btn</string>
     
-    <string name="archived_status_list_event">Event archivés</string>
-    <string name="coming_status_list_event">Event à venir</string>
     <string name="label_location_name">Lieu de RDV</string>
+    <string name="all_types">Tous types</string>
 
 </resources>

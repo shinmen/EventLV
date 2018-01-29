@@ -14,15 +14,21 @@ class Category: Parcelable {
     @Expose
     var name: String
 
+    @SerializedName("slug")
+    @Expose
+    var slug: String
+
     override fun toString(): String {
         return name
     }
 
-    constructor(name: String) {
+    constructor(name: String, slug: String) {
         this.name = name
+        this.slug = slug
     }
     private constructor(`in`: Parcel) {
         name = `in`.readString()
+        slug = `in`.readString()
     }
 
     override fun describeContents(): Int {
@@ -31,6 +37,7 @@ class Category: Parcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeString(name)
+        dest.writeString(slug)
     }
 
     companion object {

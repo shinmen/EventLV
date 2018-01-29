@@ -1,31 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.link_value.eventlv.View.Detail.DetailEventLvActivity">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_weight="1"
         tools:context="com.link_value.eventlv.View.ListEvent.MainActivity"
-        tools:showIn="@layout/app_bar_main"
-        android:id="@+id/subscribe_event_container">
-    </android.support.constraint.ConstraintLayout>
+        tools:showIn="@layout/app_bar_main"></LinearLayout>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/subscribe_event_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintVertical_weight="1"
         tools:context="com.link_value.eventlv.View.ListEvent.MainActivity"
-        tools:showIn="@layout/app_bar_main"
-        android:id="@+id/map_container">
-    </android.support.constraint.ConstraintLayout>
-
-</android.support.constraint.ConstraintLayout>
+        tools:showIn="@layout/app_bar_main"></LinearLayout>
+</LinearLayout>

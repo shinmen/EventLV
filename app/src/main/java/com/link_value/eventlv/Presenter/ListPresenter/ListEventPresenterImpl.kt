@@ -24,4 +24,8 @@ class ListEventPresenterImpl(
         mListRepo.queryEventsByCategory(category, mListEventView)
     }
 
+    override fun fetchAll() {
+        mListRepo.queryComingEvents(mListEventView)
+    }
+
 }
