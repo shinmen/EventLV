@@ -13,6 +13,10 @@ import java.util.*
 
 class EventLV : Parcelable {
 
+    @SerializedName("uuid")
+    @Expose
+    private var uuid: String
+
     @SerializedName("title")
     @Expose
     var title: String
@@ -57,6 +61,7 @@ class EventLV : Parcelable {
             initiator: Partner,
             participants: List<Partner>
     ) {
+        this.uuid = UUID.randomUUID().toString()
         this.title = title
         this.category = category
         this.startedAt = startedAt
@@ -68,6 +73,7 @@ class EventLV : Parcelable {
     }
 
     private constructor(`in`: Parcel) {
+        uuid = `in`.readString()
         title = `in`.readString()
         category = `in`.readParcelable(Category::class.java.classLoader)
         locationName = `in`.readString()
@@ -84,6 +90,7 @@ class EventLV : Parcelable {
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(uuid)
         dest.writeString(title)
         dest.writeParcelable(category, flags)
         dest.writeString(locationName)

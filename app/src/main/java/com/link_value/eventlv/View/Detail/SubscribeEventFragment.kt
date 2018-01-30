@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_subscribe_event.*
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.LinearLayout.HORIZONTAL
+import com.link_value.eventlv.Model.MockLoggedInPartner
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.find
@@ -40,6 +41,7 @@ class SubscribeEventFragment: Fragment(),
         if (arguments != null) {
             mEventDetail = arguments!!.getParcelable(EVENT_LV) as EventLV
             mParticipants = mEventDetail.participants
+            mInitiator = mEventDetail.initiator
         }
     }
 
@@ -51,9 +53,8 @@ class SubscribeEventFragment: Fragment(),
         val partnerList = view.findViewById(R.id.partner_avatar_list) as RecyclerView
         val participatingBtn = view.findViewById(R.id.participate_btn) as FloatingActionButton
 
-        mInitiator = mEventDetail.initiator
         Picasso.with(context)
-                .load(mInitiator.avatarUrl)
+                .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
                 .placeholder(android.R.drawable.picture_frame)
                 .fit()
                 .into(participatingBtn)

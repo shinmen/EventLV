@@ -1,6 +1,7 @@
 package com.link_value.eventlv.Presenter.DetailPresenter
 
 import com.link_value.eventlv.View.Detail.SubscriptionView
+import java.util.*
 
 /**
  * Created by julienb on 29/01/18.
@@ -15,9 +16,9 @@ class DetailPresenterImpl(private val subscriptionView: SubscriptionView) : Deta
     }
 
     override fun subscribeToEvent() {
+
     }
 
     override fun unsubscribeToEvent() {
     }
-
 }
