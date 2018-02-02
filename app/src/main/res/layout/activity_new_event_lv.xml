@@ -145,6 +145,6 @@
         android:transitionName="@string/transition_add_btn"
         app:layout_constraintTop_toBottomOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/radius"
+        android:background="@drawable/shape_smooth"
         />
 </android.support.constraint.ConstraintLayout>

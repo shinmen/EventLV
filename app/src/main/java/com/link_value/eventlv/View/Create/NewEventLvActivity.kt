@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Explode
+import android.transition.Slide
 import android.view.View
 import android.widget.AdapterView
 import android.widget.SeekBar
@@ -67,7 +68,6 @@ class NewEventLvActivity : AppCompatActivity(),
 
         setContentView(R.layout.activity_new_event_lv)
         EventBus.getDefault().register(this)
-        window.allowEnterTransitionOverlap = true
         val explode = Explode()
         window.enterTransition = explode
 

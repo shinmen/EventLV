@@ -7,7 +7,9 @@ import com.squareup.picasso.Picasso
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import com.link_value.eventlv.Model.MockLoggedInPartner
 import com.link_value.eventlv.R
 import com.link_value.eventlv.View.Detail.PartnerAvatarRecyclerViewAdapter.ViewHolder
 
@@ -31,17 +33,17 @@ class PartnerAvatarRecyclerViewAdapter
         notifyItemChanged(index)
     }
 
-    fun addParticipant(position: Int) {
-        itemCount = participants.size
-        notifyItemInserted(position)
-        notifyItemRangeInserted(position, participants.size)
-
-
+    fun addParticipant(loggedInPartner: Partner) {
+        participants.add(0, loggedInPartner)
+        //itemCount = participants.size
+        notifyItemInserted(0)
+        //notifyItemRangeInserted(position, participants.size)
     }
 
-    fun removeParticipant(position: Int) {
-        itemCount = participants.size
-        notifyItemRemoved(position)
+    fun removeParticipant(loggedInPartner: Partner) {
+        //itemCount = participants.size
+        participants.removeAt(0)
+        notifyItemRemoved(0)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

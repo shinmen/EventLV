@@ -7,7 +7,9 @@ import com.link_value.eventlv.View.Create.NewEventLvActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityOptionsCompat
 import android.transition.Explode
+import android.transition.Slide
 import android.view.View
+import android.view.Window
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenterImpl
 import com.link_value.eventlv.Repository.List.ListCategoryRepositoryImpl
@@ -31,14 +33,8 @@ class MainActivity : AppCompatActivity() {
                     .add(android.R.id.content, mListCategoryTabFragment)
                     .add(R.id.list_container, mListEventFragment)
                     .commit()
-
         onClickGoToNewEvent()
         initPresenter()
-
-        window.allowEnterTransitionOverlap = false
-        val explode = Explode()
-        window.enterTransition = explode
-        window.exitTransition = explode
     }
 
     private fun onClickGoToNewEvent() {

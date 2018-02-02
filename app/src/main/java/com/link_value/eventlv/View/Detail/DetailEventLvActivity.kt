@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.transition.Explode
+import android.transition.Slide
+import android.view.Window
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenter
 import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenterImpl
@@ -29,6 +31,7 @@ class DetailEventLvActivity : AppCompatActivity()
                 .add(R.id.detail_container, mapEventFragment)
                 .add(R.id.detail_container, detailEventValueFragment)
                 .commit()
+
         mPresenter = DetailPresenterImpl(detailEventValueFragment)
 
         val explode = Explode()

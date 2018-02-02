@@ -1,7 +1,9 @@
 package com.link_value.eventlv.View.ListEvent
 
 import android.os.Bundle
+import android.support.transition.*
 import android.support.v4.app.Fragment
+import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,9 +14,6 @@ import com.link_value.eventlv.Model.Event.DisplayEventLvDetail
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
-import com.link_value.eventlv.Repository.List.ListEventRepositoryImpl
-import com.link_value.eventlv.Repository.List.StreetViewRepositoryImpl
-import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Model.Event.TabSelectedEvent
 import com.link_value.eventlv.View.Detail.DetailEventLvActivity
 import org.greenrobot.eventbus.EventBus
@@ -29,6 +28,7 @@ class EventLvFragment : Fragment(), ListEventView {
     private lateinit var mAdapter:EventLvListRecyclerViewAdapter
     lateinit var mPresenter: ListEventPresenterImpl
     private var tabSelected: String? = null
+    private lateinit var mView: ViewGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,6 @@ class EventLvFragment : Fragment(), ListEventView {
     fun onDisplayDetail(ev: DisplayEventLvDetail) {
         val i = DetailEventLvActivity.newIntent(activity!!, ev.eventLv)
         startActivity(i)
-        Toast.makeText(activity, ev.eventLv.title, Toast.LENGTH_LONG).show()
     }
 
     @Subscribe
@@ -61,20 +60,21 @@ class EventLvFragment : Fragment(), ListEventView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_eventlv_list, container, false)
+        mView = inflater.inflate(R.layout.fragment_eventlv_list, container, false) as ViewGroup
         mAdapter = EventLvListRecyclerViewAdapter(activity!!, emptyList())
         // Set the adapter
-        if (view is RecyclerView) {
-            val context = view.getContext()
-            view.layoutManager = LinearLayoutManager(context)
-            view.adapter = mAdapter
+        if (mView is RecyclerView) {
+            (mView as RecyclerView).layoutManager = LinearLayoutManager(mView.context)
+            (mView as RecyclerView).adapter = mAdapter
         }
 
-        return view
+        return mView
     }
 
     override fun onEventsFetched(events: List<EventLV>) {
+        TransitionManager.beginDelayedTransition(mView, Slide())
         mAdapter.loadEvents(events)
+        //loading_list.hide()
     }
 
     override fun onErrorEventsFetch(error : String?) {
