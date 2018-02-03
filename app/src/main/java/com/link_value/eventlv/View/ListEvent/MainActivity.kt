@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mListEventFragment: EventLvFragment
     private lateinit var mListCategoryTabFragment: ListCategoryTabFragment
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,11 +32,10 @@ class MainActivity : AppCompatActivity() {
                     .add(R.id.list_container, mListEventFragment)
                     .commit()
 
-
         onClickGoToNewEvent()
         initPresenter()
 
-        window.allowEnterTransitionOverlap = true
+        window.allowEnterTransitionOverlap = false
         val explode = Explode()
         window.enterTransition = explode
         window.exitTransition = explode

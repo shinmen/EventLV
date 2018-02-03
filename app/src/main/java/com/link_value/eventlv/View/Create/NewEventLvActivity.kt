@@ -40,7 +40,6 @@ import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
-import com.link_value.eventlv.R.id.toolbar
 import com.link_value.eventlv.Repository.Create.NewEventRepositoryImpl
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
@@ -70,7 +69,6 @@ class NewEventLvActivity : AppCompatActivity(),
         EventBus.getDefault().register(this)
         window.allowEnterTransitionOverlap = true
         val explode = Explode()
-        explode.excludeTarget(toolbar, true)
         window.enterTransition = explode
 
         askForUserLocation()

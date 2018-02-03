@@ -3,6 +3,7 @@ package com.link_value.eventlv.View.Detail
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
+import android.support.transition.TransitionManager
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.link_value.eventlv.R
 import kotlinx.android.synthetic.main.fragment_subscribe_event.*
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.transition.ChangeBounds
 import android.widget.LinearLayout.HORIZONTAL
 import com.link_value.eventlv.Model.MockLoggedInPartner
 import com.squareup.picasso.Picasso
@@ -64,6 +66,7 @@ class SubscribeEventFragment: Fragment(),
         participatingBtn.onClick {
             partnerOnClick()
         }
+        TransitionManager.beginDelayedTransition(partnerList)
 
         return view
     }
@@ -77,6 +80,7 @@ class SubscribeEventFragment: Fragment(),
         participate_btn.setOnClickListener({
             mPartnerIsParticipating = !mPartnerIsParticipating
             btnColorOnParticipatingStatus(mPartnerIsParticipating)
+            TransitionManager.beginDelayedTransition(mRootView, ChangeBounds())
         })
     }
 

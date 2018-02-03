@@ -57,8 +57,8 @@ class ListCategoryTabFragment : Fragment(),
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (mCategories.containsKey(tab!!.text.toString())) {
-                    val category = mCategories[tab!!.text.toString()]
+                if (mCategories.containsKey(tab?.text.toString())) {
+                    val category = mCategories[tab?.text.toString()]
                     EventBus.getDefault().post(TabSelectedEvent(category!!))
                 } else {
                     val category = Category(resources.getString(R.string.all_types), "all")
