@@ -34,16 +34,17 @@ class PartnerAvatarRecyclerViewAdapter
     }
 
     fun addParticipant(loggedInPartner: Partner) {
-        participants.add(0, loggedInPartner)
-        //itemCount = participants.size
-        notifyItemInserted(0)
-        //notifyItemRangeInserted(position, participants.size)
+        if (!participants.contains(loggedInPartner)) {
+            participants.add(0, loggedInPartner)
+            notifyItemInserted(0)
+        }
     }
 
     fun removeParticipant(loggedInPartner: Partner) {
-        //itemCount = participants.size
-        participants.removeAt(0)
-        notifyItemRemoved(0)
+        if (participants.contains(loggedInPartner)) {
+            participants.removeAt(0)
+            notifyItemRemoved(0)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

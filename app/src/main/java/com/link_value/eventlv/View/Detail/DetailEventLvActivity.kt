@@ -33,13 +33,8 @@ class DetailEventLvActivity : AppCompatActivity()
                 .commit()
 
         mPresenter = DetailPresenterImpl(detailEventValueFragment)
-
-        val explode = Explode()
-        explode.duration = 1000
-        window.enterTransition = explode
-        window.returnTransition = explode
-        window.reenterTransition = explode
-        window.exitTransition = explode
+        detailEventValueFragment.mPresenter = mPresenter
+        mPresenter.start()
     }
 
     companion object {

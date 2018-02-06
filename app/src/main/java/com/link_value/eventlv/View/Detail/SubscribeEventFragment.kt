@@ -1,6 +1,5 @@
 package com.link_value.eventlv.View.Detail
 
-import android.graphics.drawable.Drawable
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import com.link_value.eventlv.Model.EventLV
@@ -14,8 +13,10 @@ import com.link_value.eventlv.Model.MockLoggedInPartner
 import com.squareup.picasso.Picasso
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import android.support.transition.*
+import android.support.v4.content.ContextCompat
 import android.view.*
 import android.widget.*
+import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenter
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.imageResource
 
@@ -27,20 +28,27 @@ class SubscribeEventFragment: Fragment(),
         SubscriptionView
 {
     override fun onSubscribed() {
+        btnOnParticipatingStatus(true)
     }
 
     override fun onUnsubscribe() {
     }
 
+    lateinit var mPresenter: DetailPresenter
     private lateinit var mEventDetail: EventLV
     private lateinit var mParticipants: List<Partner>
     private lateinit var mInitiator: Partner
     private var mPartnerIsParticipating: Boolean = false
-    private lateinit var mSceneImage: ImageView
     private lateinit var mRecyclerViewAdapter: PartnerAvatarRecyclerViewAdapter
-    private var mLocationList: IntArray = IntArray(2)
-    private lateinit var mSceneRoot: ViewGroup
-    var mAvatar: Drawable? = null
+    private lateinit var mRootView: ViewGroup
+    private lateinit var participatingBtnView: ImageButton
+    private lateinit var mInitiatorAvatarView: ImageView
+    private lateinit var picasso: Picasso
+    private lateinit var mEventAddressView: TextView
+    private lateinit var mEventNameView: TextView
+    private lateinit var mEventTimeView: TextView
+    private lateinit var mEventLocationNameView: TextView
+    private lateinit var mEventCategoryView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,79 +62,88 @@ class SubscribeEventFragment: Fragment(),
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_subscribe_event, container, false)
-        mSceneRoot = view.findViewById(R.id.root_subscribe_layout) as ViewGroup
+        mRootView = view.findViewById(R.id.root_subscribe_layout) as ViewGroup
+        participatingBtnView = view.findViewById(R.id.participate_btn)
+        mInitiatorAvatarView = view.findViewById(R.id.initiator_avatar)
+        mEventAddressView = view.findViewById(R.id.event_address)
+        mEventNameView = view.findViewById(R.id.event_name)
+        mEventTimeView = view.findViewById(R.id.event_time)
+        mEventLocationNameView = view.findViewById(R.id.event_location_name)
+        mEventCategoryView = view.findViewById(R.id.event_category)
+        val partnerListView = view.findViewById<RecyclerView>(R.id.partner_avatar_list)
+
 
         val layoutManager = LinearLayoutManager(activity, HORIZONTAL, false)
         mRecyclerViewAdapter = PartnerAvatarRecyclerViewAdapter(activity!!, mParticipants.toMutableList())
-        val partnerList = view.findViewById(R.id.partner_avatar_list) as RecyclerView
-        val participatingBtn = view.findViewById(R.id.participate_btn) as ImageButton
-        mSceneImage = view.findViewById(R.id.scene_avatar_origin) as ImageView
+        partnerListView.layoutManager = layoutManager
+        partnerListView.adapter = mRecyclerViewAdapter
 
-        partnerList.layoutManager = layoutManager
-        partnerList.adapter = mRecyclerViewAdapter
-        val picasso = Picasso.with(context)
-        picasso.setIndicatorsEnabled(true)
+        picasso = Picasso.with(context)
+        picasso.setIndicatorsEnabled(false)
+        loadLoggedInPartner()
+        loadInitiator()
+        hydrateEvent()
 
-        picasso
-                .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
-                .placeholder(android.R.drawable.picture_frame)
-                .fit()
-                .into(participatingBtn, object : com.squareup.picasso.Callback {
-                    override fun onSuccess() {
-                        mAvatar = participate_btn.drawable
-                        participate_btn.backgroundDrawable = mAvatar
-                    }
+        mPresenter.isLoggedInUserParticipating(this)
 
-                    override fun onError() {
-                    }
-                })
-
-        participatingBtn.onClick {
-            partnerOnClick()
-        }
-        TransitionManager.beginDelayedTransition(partnerList)
+        partnerOnClick()
 
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val location = IntArray(2)
-        mSceneImage.getLocationOnScreen(location)
-        super.onViewCreated(view, savedInstanceState)
+    private fun hydrateEvent() {
+        mEventAddressView.text = mEventDetail.address
+        mEventNameView.text = mEventDetail.title
+        mEventLocationNameView.text = mEventDetail.locationName
+        mEventTimeView.text = mEventDetail.startedAt.toString()
+        mEventCategoryView.text = mEventDetail.category.name
+
     }
 
+    private fun loadLoggedInPartner() {
+        picasso
+            .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
+            .placeholder(android.R.drawable.picture_frame)
+            .fit()
+            .into(participatingBtnView, object : com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    participate_btn.backgroundDrawable = participate_btn.drawable
+                }
+                override fun onError() {}
+            })
+    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
+    private fun loadInitiator() {
+        picasso
+                .load(mInitiator.avatarUrl)
+                .placeholder(android.R.drawable.picture_frame)
+                .fit()
+                .into(mInitiatorAvatarView)
     }
 
     private fun partnerOnClick() {
-        participate_btn.setOnClickListener({
-            mPartnerIsParticipating = !mPartnerIsParticipating
-            val bounds = ChangeBounds()
-            bounds.duration = 1000
-            TransitionManager.beginDelayedTransition(mSceneRoot, bounds)
-        })
+        participatingBtnView.onClick {
+            participate_btn.setOnClickListener({
+                mPartnerIsParticipating = !mPartnerIsParticipating
+                val bounds = ChangeBounds()
+                bounds.duration = 500
+                TransitionManager.beginDelayedTransition(mRootView, bounds)
+                btnOnParticipatingStatus(mPartnerIsParticipating)
+            })
+        }
     }
 
-
-
-
-    private fun btnColorOnParticipatingStatus(isParticipating: Boolean) {
-        val colorIn = resources.getColorStateList(android.R.color.holo_green_dark)
-        val colorOut = resources.getColorStateList(android.R.color.holo_red_dark)
+    private fun btnOnParticipatingStatus(isParticipating: Boolean) {
         if (isParticipating) {
-            participate_btn.imageResource = android.R.color.transparent
-            participate_btn.backgroundTintList = colorIn
             mRecyclerViewAdapter.addParticipant(MockLoggedInPartner.loggedInPartner)
-
+            participatingBtnView.imageResource = android.R.color.transparent
+            participatingBtnView.backgroundTintList = ContextCompat.getColorStateList(activity!!, R.color.colorPrimaryDark)
         } else {
-            val picasso = Picasso.with(context)
-            picasso.setIndicatorsEnabled(true)
-
-            participate_btn.backgroundDrawable = mAvatar
-            participate_btn.backgroundTintList = colorOut
+            picasso
+                .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
+                .placeholder(android.R.drawable.picture_frame)
+                .fit()
+                .into(participatingBtnView)
             mRecyclerViewAdapter.removeParticipant(MockLoggedInPartner.loggedInPartner)
         }
     }

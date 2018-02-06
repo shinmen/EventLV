@@ -8,7 +8,7 @@ import java.util.*
  */
 class DetailPresenterImpl(private val subscriptionView: SubscriptionView) : DetailPresenter {
     override fun start() {
-        isLoggedInUserParticipating(subscriptionView)
+
     }
 
     override fun isLoggedInUserParticipating(subscriptionView: SubscriptionView) {

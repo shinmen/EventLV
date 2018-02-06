@@ -1,32 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_subscribe_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/root_subscribe_layout">
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="parent"
+        android:text="évènement" />
+    <TextView
+        android:id="@+id/event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_name"
+        android:text="début" />
+    <TextView
+        android:id="@+id/event_location_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_time"
+        android:text="lieu" />
+    <TextView
+        android:id="@+id/event_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_location_name"
+        android:text="addresse" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_initiator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="120dp" />
+
+    <TextView
+        android:id="@+id/event_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/guideline_initiator"
+        android:text="catégorie" />
+    <TextView
+        android:id="@+id/event_initiator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/guideline_initiator"
+        app:layout_constraintTop_toBottomOf="@+id/event_category"
+        android:text="Proposé par"
+        />
+
+    <ImageView
+        android:id="@+id/initiator_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_category"
+        app:layout_constraintLeft_toRightOf="@+id/event_initiator"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/partner_avatar_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="parent"
-        tools:listitem="@layout/fragment_partner_avatar"/>
+        app:layout_constraintTop_toBottomOf="@+id/event_address"
+        app:layout_constraintHorizontal_bias="0.5"
+        tools:listitem="@layout/fragment_partner_avatar" />
 
-        <ImageButton
-            android:id="@+id/participate_btn"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@drawable/shape_round"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/partner_avatar_list"
-            android:layout_marginTop="45dp"
-            />
+    <ImageButton
+        android:id="@+id/participate_btn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/shape_round"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/partner_avatar_list" />
 
 </android.support.constraint.ConstraintLayout>
