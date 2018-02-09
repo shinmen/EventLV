@@ -103,7 +103,6 @@ class SubscribeEventFragment: Fragment(),
     private fun loadLoggedInPartner() {
         picasso
             .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
-            .placeholder(android.R.drawable.picture_frame)
             .fit()
             .into(participatingBtnView, object : com.squareup.picasso.Callback {
                 override fun onSuccess() {

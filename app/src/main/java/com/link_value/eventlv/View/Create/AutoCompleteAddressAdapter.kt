@@ -30,5 +30,4 @@ class AutoCompleteAddressAdapter(context: Context, resource: Int) : ArrayAdapter
     override fun getItem(position: Int): AddressEventLV {
         return addresses[position]
     }
-
 }

@@ -24,7 +24,8 @@ class DetailEventLvActivity : AppCompatActivity()
         val event = bundle.getParcelable(EventLV.PARCEL_NAME) as EventLV
         val detailEventValueFragment = SubscribeEventFragment.newInstance(event)
         val mapEventFragment = MapFragment.newInstance(event)
-
+        val explode = Explode()
+        window.enterTransition = explode
         supportFragmentManager
                 .beginTransaction()
                 .setTransition(android.R.transition.explode)
@@ -33,6 +34,7 @@ class DetailEventLvActivity : AppCompatActivity()
                 .commit()
 
         mPresenter = DetailPresenterImpl(detailEventValueFragment)
+
         detailEventValueFragment.mPresenter = mPresenter
         mPresenter.start()
     }

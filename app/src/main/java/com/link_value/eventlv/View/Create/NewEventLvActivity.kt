@@ -15,6 +15,7 @@ import android.transition.Explode
 import android.transition.Slide
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
@@ -42,6 +43,8 @@ import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
 import com.link_value.eventlv.Repository.Create.NewEventRepositoryImpl
+import com.link_value.eventlv.Repository.List.ListCategoryRepositoryImpl
+import com.link_value.eventlv.View.ListEvent.ListCategoryView
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.text.DateFormat
@@ -50,6 +53,7 @@ import kotlin.coroutines.experimental.suspendCoroutine
 
 class NewEventLvActivity : AppCompatActivity(),
         CreateEventView,
+        ListCategoryView,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
@@ -61,6 +65,7 @@ class NewEventLvActivity : AppCompatActivity(),
     private var mAddress: String? = null
     private var mLocationName: String? = null
     private var mStartedDate = Calendar.getInstance()
+    private var mCategory: Category? = null
     private lateinit var mPresenter: CreateEventPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,8 +77,15 @@ class NewEventLvActivity : AppCompatActivity(),
         window.enterTransition = explode
 
         askForUserLocation()
-        val repo = NewEventRepositoryImpl(HttpClient())
-        mPresenter = CreateEventPresenterImpl(this@NewEventLvActivity, repo)
+        val newRepo = NewEventRepositoryImpl(HttpClient())
+        val categoriesRepo = ListCategoryRepositoryImpl(HttpClient())
+        mPresenter = CreateEventPresenterImpl(
+                this@NewEventLvActivity,
+                this@NewEventLvActivity,
+                newRepo,
+                categoriesRepo
+        )
+        mPresenter.start()
 
         event_date.onClick {
             val datePickerFragment = DatePickerDialogFragment.newInstance(Date())
@@ -90,21 +102,29 @@ class NewEventLvActivity : AppCompatActivity(),
                 event_duration.text = resources.getString(R.string.duration_input_value, progress)
                 mDuration = progress
             }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-            }
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
+
+        categories_spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                p0?.getItemAtPosition(0)
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                mCategory = p0!!.getItemAtPosition(pos) as Category?
+            }
+        }
+
 
         propose_event.onClick(UI) {
             val loggedInUser = Partner.mockCurrentUser()
             mEventName = input_name.text.toString()
             mLocationName = input_location_name.text.toString()
+            mCategory = categories_spinner.selectedItem as Category?
             val proposedEvent = EventLV(
                     mEventName!!,
-                    Category("contrib", "contrib"),
+                    mCategory!!,
                     mStartedDate.time,
                     mDuration,
                     mLocationName!!,
@@ -161,11 +181,22 @@ class NewEventLvActivity : AppCompatActivity(),
 
 
     override fun onEventPersisted() {
-        Toast.makeText(this@NewEventLvActivity, "event créé", Toast.LENGTH_SHORT)
+        Toast.makeText(this@NewEventLvActivity, "event créé", Toast.LENGTH_SHORT).show()
     }
 
     override fun onError(message: String?) {
-        Toast.makeText(this@NewEventLvActivity, "Désolé, une erreur est survenue lors de l'enregistrement de ", Toast.LENGTH_LONG)
+        Toast.makeText(this@NewEventLvActivity, "Désolé, une erreur est survenue lors de l'enregistrement de ", Toast.LENGTH_LONG).show()
+    }
+
+    override fun onCategoriesFetched(mapCategories: Map<String, Category>) {
+        val categories = mapCategories.map { it.value }.toList()
+        val categoriesAdapter = CategoryAdapter(this@NewEventLvActivity, android.R.layout.simple_spinner_item, categories)
+        categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categories_spinner.adapter = categoriesAdapter
+    }
+
+    override fun onErrorCategoryFetch(error: String?) {
+        Toast.makeText(this@NewEventLvActivity, "Désolé une erreur s'est produite durant la récupération des catégories", Toast.LENGTH_LONG).show()
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {

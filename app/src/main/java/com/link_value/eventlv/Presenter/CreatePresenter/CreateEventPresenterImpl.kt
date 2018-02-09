@@ -2,22 +2,29 @@ package com.link_value.eventlv.Presenter.CreatePresenter
 
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Repository.Create.NewEventRepository
+import com.link_value.eventlv.Repository.List.ListCategoryRepository
 import com.link_value.eventlv.View.Create.CreateEventView
+import com.link_value.eventlv.View.ListEvent.ListCategoryView
 
 /**
  * Created by julo on 30/12/17.
  */
 class CreateEventPresenterImpl(
-        private val view: CreateEventView,
-        private val mNewRepo: NewEventRepository
+        private val mNewView: CreateEventView,
+        private val mListCategoryView: ListCategoryView,
+        private val mNewRepo: NewEventRepository,
+        private val mCategoryRepository: ListCategoryRepository
     ): CreateEventPresenter {
 
+    override fun start() {
+        mCategoryRepository.queryCategories(mListCategoryView)
+    }
     override fun onSuccessEventSaved() {
-        view.onEventPersisted()
+        mNewView.onEventPersisted()
     }
 
     override fun onErrorEventSaved(error: String?) {
-        view.onError(error)
+        mNewView.onError(error)
     }
 
     override fun persistEventLv(event: EventLV) {
