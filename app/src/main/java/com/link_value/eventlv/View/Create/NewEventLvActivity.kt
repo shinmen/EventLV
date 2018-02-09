@@ -12,10 +12,8 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Explode
-import android.transition.Slide
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
@@ -33,11 +31,8 @@ import java.util.*
 import org.greenrobot.eventbus.Subscribe
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.common.api.PendingResult
-import com.google.android.gms.location.places.PlaceBuffer
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
-import com.link_value.eventlv.Model.AddressEventLV
 import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
@@ -49,7 +44,6 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.text.DateFormat
 import java.util.Calendar.*
-import kotlin.coroutines.experimental.suspendCoroutine
 
 class NewEventLvActivity : AppCompatActivity(),
         CreateEventView,
@@ -181,11 +175,11 @@ class NewEventLvActivity : AppCompatActivity(),
 
 
     override fun onEventPersisted() {
-        Toast.makeText(this@NewEventLvActivity, "event créé", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@NewEventLvActivity, getString(R.string.success_new), Toast.LENGTH_LONG).show()
     }
 
     override fun onError(message: String?) {
-        Toast.makeText(this@NewEventLvActivity, "Désolé, une erreur est survenue lors de l'enregistrement de ", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@NewEventLvActivity, getString(R.string.error_new), Toast.LENGTH_LONG).show()
     }
 
     override fun onCategoriesFetched(mapCategories: Map<String, Category>) {
@@ -196,11 +190,11 @@ class NewEventLvActivity : AppCompatActivity(),
     }
 
     override fun onErrorCategoryFetch(error: String?) {
-        Toast.makeText(this@NewEventLvActivity, "Désolé une erreur s'est produite durant la récupération des catégories", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@NewEventLvActivity, getString(R.string.error_list_categories), Toast.LENGTH_LONG).show()
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
-        Toast.makeText(this@NewEventLvActivity, "impossible de se connecter, l'autocomplétion de l'adresses n'est pas disponible", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@NewEventLvActivity, getString(R.string.error_google_api_connection), Toast.LENGTH_SHORT).show()
     }
 
     override fun onConnected(p0: Bundle?) {
@@ -209,14 +203,10 @@ class NewEventLvActivity : AppCompatActivity(),
         adapter = AutoCompleteAddressAdapter(this@NewEventLvActivity, android.R.layout.simple_list_item_1)
         event_duration.text = resources.getString(R.string.duration_input_value, 1)
         input_address.setAdapter(adapter)
-        input_address.threshold = 3
+        input_address.threshold = 4
         input_address.addTextChangedListener(object: TextWatcher{
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (query.toString().length >= 4) {
                     val userLocation = FetchUserLocation(locationManager)
@@ -240,7 +230,7 @@ class NewEventLvActivity : AppCompatActivity(),
     }
 
     override fun onConnectionSuspended(p0: Int) {
-        Toast.makeText(this@NewEventLvActivity, "impossible de se connecter", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@NewEventLvActivity, getString(R.string.error_google_api_connection), Toast.LENGTH_SHORT).show()
     }
 
     private fun askForUserLocation() {
@@ -268,7 +258,7 @@ class NewEventLvActivity : AppCompatActivity(),
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(
                             this@NewEventLvActivity,
-                            "Merci, votre position sera utilisée pour l'autocomplete d'adresse",
+                            getString(R.string.success_location_permission),
                             Toast.LENGTH_SHORT
                     ).show()
                     // permission was granted, yay! Do the
@@ -276,7 +266,7 @@ class NewEventLvActivity : AppCompatActivity(),
                 } else {
                     Toast.makeText(
                             this@NewEventLvActivity,
-                            "Les bureaux d'LV Paris sont pris en compte comme position d'origine de l'autocomplete d'adresse",
+                            getString(R.string.refuse_location_permission),
                             Toast.LENGTH_SHORT
                     ).show()
                     // permission denied, boo! Disable the
@@ -293,9 +283,5 @@ class NewEventLvActivity : AppCompatActivity(),
         fun newIntent(packageContext: Context): Intent {
             return Intent(packageContext, NewEventLvActivity::class.java)
         }
-    }
-
-    private suspend fun PendingResult<PlaceBuffer>.awaitPlace(): PlaceBuffer = suspendCoroutine {
-        cont-> setResultCallback { places -> cont.resume(places) }
     }
 }

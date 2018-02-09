@@ -72,7 +72,6 @@ class SubscribeEventFragment: Fragment(),
         mEventCategoryView = view.findViewById(R.id.event_category)
         val partnerListView = view.findViewById<RecyclerView>(R.id.partner_avatar_list)
 
-
         val layoutManager = LinearLayoutManager(activity, HORIZONTAL, false)
         mRecyclerViewAdapter = PartnerAvatarRecyclerViewAdapter(activity!!, mParticipants.toMutableList())
         partnerListView.layoutManager = layoutManager

@@ -78,7 +78,7 @@ class EventLvFragment : Fragment(), ListEventView {
     }
 
     override fun onErrorEventsFetch(error : String?) {
-        Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(R.string.error_list), Toast.LENGTH_LONG).show()
     }
 
     companion object {
