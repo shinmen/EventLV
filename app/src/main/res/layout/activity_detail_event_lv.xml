@@ -8,7 +8,4 @@
     tools:context="com.link_value.eventlv.View.Detail.DetailEventLvActivity"
     android:id="@+id/detail_container">
 
-
-
-
 </LinearLayout>

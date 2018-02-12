@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowActivityTransitions">true</item>
+        <item name="fontFamily">@font/convergence</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

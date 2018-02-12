@@ -19,6 +19,8 @@ import android.widget.*
 import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenter
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.imageResource
+import java.text.DateFormat
+import java.util.*
 
 
 /**
@@ -28,10 +30,13 @@ class SubscribeEventFragment: Fragment(),
         SubscriptionView
 {
     override fun onSubscribed() {
-        btnOnParticipatingStatus(true)
+        mPartnerIsParticipating = true
+        btnOnParticipatingStatus(mPartnerIsParticipating)
     }
 
     override fun onUnsubscribe() {
+        mPartnerIsParticipating = false
+        btnOnParticipatingStatus(mPartnerIsParticipating)
     }
 
     lateinit var mPresenter: DetailPresenter
@@ -94,14 +99,15 @@ class SubscribeEventFragment: Fragment(),
         mEventAddressView.text = mEventDetail.address
         mEventNameView.text = mEventDetail.title
         mEventLocationNameView.text = mEventDetail.locationName
-        mEventTimeView.text = mEventDetail.startedAt.toString()
+        val date = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault()).format(mEventDetail.startedAt)
+        mEventTimeView.text = date
         mEventCategoryView.text = mEventDetail.category.name
-
     }
 
     private fun loadLoggedInPartner() {
         picasso
             .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
+            .placeholder(android.R.drawable.picture_frame)
             .fit()
             .into(participatingBtnView, object : com.squareup.picasso.Callback {
                 override fun onSuccess() {

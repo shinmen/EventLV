@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_subscribe_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/text_margin"
+    android:layout_weight="0.5"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="parent"
         android:text="évènement" />
     <TextView
@@ -42,7 +47,13 @@
         android:id="@+id/event_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/shape_smooth"
+        android:textColor="@color/colorTextOverlay"
+        android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/guideline_initiator"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="@dimen/sm_padding"
         android:text="catégorie" />
     <TextView
         android:id="@+id/event_initiator"
@@ -50,7 +61,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/guideline_initiator"
         app:layout_constraintTop_toBottomOf="@+id/event_category"
-        android:text="Proposé par"
+        android:text="@string/proposed_by"
+        android:paddingRight="@dimen/md_padding"
         />
 
     <ImageView
@@ -77,7 +89,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="45dp"
-        android:background="@drawable/shape_round"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintLeft_toLeftOf="parent"

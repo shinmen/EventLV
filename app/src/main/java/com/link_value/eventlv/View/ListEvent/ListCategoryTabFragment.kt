@@ -35,14 +35,6 @@ class ListCategoryTabFragment : Fragment(),
         Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_liststatustab, container, false)
         return view

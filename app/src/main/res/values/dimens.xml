@@ -11,4 +11,5 @@
     <dimen name="md_padding">8dp</dimen>
     <dimen name="lg_padding">16dp</dimen>
     <dimen name="md_text">18sp</dimen>
+    <dimen name="sm_padding">8dp</dimen>
 </resources>
