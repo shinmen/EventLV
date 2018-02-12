@@ -35,6 +35,7 @@ import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
+import com.link_value.eventlv.Model.EventLocationLatLng
 import com.link_value.eventlv.Model.Partner
 import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
 import com.link_value.eventlv.Repository.Create.NewEventRepositoryImpl
@@ -124,7 +125,8 @@ class NewEventLvActivity : AppCompatActivity(),
                     mLocationName!!,
                     mAddress!!,
                     loggedInUser,
-                    emptyList()
+                    emptyList(),
+                    EventLocationLatLng(48.883003, 2.316180)
             )
             mPresenter.persistEventLv(proposedEvent)
         }
@@ -135,7 +137,6 @@ class NewEventLvActivity : AppCompatActivity(),
                 .addApi(Places.GEO_DATA_API)
                 .addConnectionCallbacks(this)
                 .build()
-
     }
 
     override fun onStart() {

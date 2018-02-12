@@ -22,10 +22,12 @@ class DetailEventLvActivity : AppCompatActivity()
         setContentView(R.layout.activity_detail_event_lv)
         val bundle = intent.extras
         val event = bundle.getParcelable(EventLV.PARCEL_NAME) as EventLV
+
         val detailEventValueFragment = SubscribeEventFragment.newInstance(event)
         val mapEventFragment = MapFragment.newInstance(event)
         val explode = Explode()
         window.enterTransition = explode
+
         supportFragmentManager
                 .beginTransaction()
                 .setTransition(android.R.transition.explode)

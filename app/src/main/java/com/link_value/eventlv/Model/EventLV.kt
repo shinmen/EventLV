@@ -49,6 +49,10 @@ class EventLV : Parcelable {
     @Expose
     var participants: List<Partner> = ArrayList()
 
+    @SerializedName("event_coordinates")
+    @Expose
+    var coordinates: EventLocationLatLng
+
     var locationStreetPictureUrl: String? = null
 
     constructor(
@@ -59,7 +63,8 @@ class EventLV : Parcelable {
             locationName: String,
             address: String,
             initiator: Partner,
-            participants: List<Partner>
+            participants: List<Partner>,
+            coordinates: EventLocationLatLng
     ) {
         this.uuid = UUID.randomUUID().toString()
         this.title = title
@@ -70,6 +75,7 @@ class EventLV : Parcelable {
         this.address = address
         this.initiator = initiator
         this.participants = participants
+        this.coordinates = coordinates
     }
 
     private constructor(`in`: Parcel) {
@@ -83,6 +89,7 @@ class EventLV : Parcelable {
         initiator = `in`.readParcelable(Partner::class.java.classLoader)
         duration = `in`.readInt()
         startedAt = Date(`in`.readLong())
+        coordinates = `in`.readParcelable(EventLocationLatLng::class.java.classLoader)
     }
 
     override fun describeContents(): Int {
@@ -99,8 +106,8 @@ class EventLV : Parcelable {
         dest.writeList(participants)
         dest.writeParcelable(initiator, flags)
         dest.writeInt(duration!!)
-
         dest.writeLong(startedAt!!.time)
+        dest.writeParcelable(coordinates, flags)
     }
 
     companion object {
