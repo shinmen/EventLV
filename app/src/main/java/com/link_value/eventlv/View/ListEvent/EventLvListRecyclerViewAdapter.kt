@@ -13,6 +13,7 @@ import com.link_value.eventlv.R
 import com.squareup.picasso.Picasso
 import org.greenrobot.eventbus.EventBus
 import java.text.DateFormat
+import java.util.*
 
 class EventLvListRecyclerViewAdapter(
         private val context: Context,
@@ -41,7 +42,7 @@ class EventLvListRecyclerViewAdapter(
         holder.mTitleView.text = event.title
         holder.mCategoryView.text = event.category.toString()
         val startedAt = event.startedAt
-        val date = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(startedAt)
+        val date = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault()).format(startedAt)
         holder.mStartTimeView.text = date
 
         holder.mView.setOnClickListener {
