@@ -11,10 +11,10 @@ import com.google.gson.annotations.SerializedName
 class EventLocationLatLng :Parcelable {
     @SerializedName("lat")
     @Expose
-    private var lat: Double
+    var lat: Double
     @SerializedName("lng")
     @Expose
-    private var lng: Double
+    var lng: Double
 
     constructor(lat: Double, lng: Double) {
         this.lat = lat

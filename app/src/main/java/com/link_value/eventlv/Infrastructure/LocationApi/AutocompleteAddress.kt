@@ -8,6 +8,7 @@ import com.google.android.gms.location.places.AutocompleteFilter
 import com.google.android.gms.location.places.AutocompletePredictionBuffer
 import com.google.android.gms.location.places.PlaceBuffer
 import com.google.android.gms.location.places.Places
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import com.google.android.gms.maps.model.LatLngBounds
@@ -55,13 +56,13 @@ class AutocompleteAddress(private val googleApiClient: GoogleApiClient) {
         return addressList
     }
 
-    suspend fun getPreciseAddress(address: AddressEventLV): String {
+    suspend fun getPreciseAddress(address: AddressEventLV): Pair<String, LatLng> {
         val placeBuffer = Places.GeoDataApi.getPlaceById(googleApiClient, address.placeId)
         val places = placeBuffer.awaitPlace()
-        val preciseAddress = places.get(0).address
+        val preciseAddress = Pair(places.get(0).address.toString(), places.get(0).latLng)
         places.release()
 
-        return preciseAddress.toString()
+        return preciseAddress
     }
 
     private suspend fun PendingResult<AutocompletePredictionBuffer>.awaitPredictions(): AutocompletePredictionBuffer = suspendCoroutine {

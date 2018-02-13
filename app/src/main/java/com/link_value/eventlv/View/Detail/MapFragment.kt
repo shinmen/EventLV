@@ -6,14 +6,15 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.link_value.eventlv.Model.EventLV
 
 import com.link_value.eventlv.R
 import com.google.android.gms.maps.MapView
-
-
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 
 /**
@@ -22,7 +23,16 @@ import com.google.android.gms.maps.MapView
 class MapFragment : Fragment(),
         OnMapReadyCallback
 {
-    override fun onMapReady(p0: GoogleMap?) {
+    override fun onMapReady(map: GoogleMap?) {
+        val marker = MarkerOptions()
+        if (mEventDetail.coordinates != null) {
+            marker.title(mEventDetail.locationName)
+            val eventLatLng = LatLng(mEventDetail.coordinates!!.lat, mEventDetail.coordinates!!.lng)
+            marker.position(eventLatLng)
+            map?.addMarker(marker)
+            map?.moveCamera(CameraUpdateFactory.newLatLng(eventLatLng))
+            map?.moveCamera(CameraUpdateFactory.zoomTo(12.toFloat()))
+        }
     }
 
     private lateinit var mEventDetail: EventLV

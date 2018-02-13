@@ -15,8 +15,6 @@ import kotlin.coroutines.experimental.suspendCoroutine
  * Created by julienb on 28/12/17.
  */
 class FetchUserLocation(private val locationManager: LocationManager) {
-
-    private val ch = Channel<Location?>()
     companion object {
         val LV_LATLNG = LatLng(48.883003, 2.316180)
     }

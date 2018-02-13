@@ -5,6 +5,7 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.support.v4.app.ActivityCompat
@@ -13,9 +14,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Explode
 import android.view.View
-import android.widget.AdapterView
-import android.widget.SeekBar
-import android.widget.Toast
+import android.widget.*
 import com.google.android.gms.common.ConnectionResult
 import com.link_value.eventlv.View.Common.DatePickerDialogFragment
 import com.link_value.eventlv.View.Common.TimePickerDialogFragment
@@ -31,6 +30,10 @@ import java.util.*
 import org.greenrobot.eventbus.Subscribe
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.link_value.eventlv.Infrastructure.LocationApi.AutocompleteAddress
 import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Model.Category
@@ -54,13 +57,14 @@ class NewEventLvActivity : AppCompatActivity(),
 {
     private lateinit var adapter: AutoCompleteAddressAdapter
     private lateinit var googleApiClient: GoogleApiClient
-
     private var mDuration: Int? = null
     private var mEventName: String? = null
     private var mAddress: String? = null
     private var mLocationName: String? = null
     private var mStartedDate = Calendar.getInstance()
     private var mCategory: Category? = null
+
+    private var mLatLng: EventLocationLatLng? = null
     private lateinit var mPresenter: CreateEventPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,54 +86,80 @@ class NewEventLvActivity : AppCompatActivity(),
         )
         mPresenter.start()
 
-        event_date.onClick {
-            val datePickerFragment = DatePickerDialogFragment.newInstance(Date())
-            datePickerFragment.show(supportFragmentManager, "date")
-        }
+        displayDatePicker()
+        displayTimePicker()
+        updateDurationOnChange()
+        updateCategoryOnChange()
+        onClickedSave()
 
-        event_time.onClick {
-            val timePickerFragment = TimePickerDialogFragment.newInstance(Date())
-            timePickerFragment.show(supportFragmentManager, "time")
-        }
+        val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        /*val loc = mFusedLocationClient.lastLocation
+        loc.addOnSuccessListener {
+            it.latitude
+        }*/
 
-        input_duration.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
-                event_duration.text = resources.getString(R.string.duration_input_value, progress)
-                mDuration = progress
+        val mLocationRequest = LocationRequest()
+        mLocationRequest.setInterval(10000)
+        mLocationRequest.setFastestInterval(5000)
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest)
+        val client = LocationServices.getSettingsClient(this)
+        val task = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener(this, OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            fun onSuccess(locationSettingsResponse: LocationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
             }
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
-            override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
 
-        categories_spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                p0?.getItemAtPosition(0)
+        task.addOnFailureListener(this, OnFailureListener() {
+            @Override
+            fun onFailure(e: Exception) {
+                if (e is ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        val resolvable = e
+                        /*resolvable.startResolutionForResult(this,
+                                REQUEST_CHECK_SETTINGS)*/
+                    } catch (sendEx: IntentSender.SendIntentException ) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        })
+
+/*        mFusedLocationClient.requestLocationUpdates(mLocationRequest, object: LocationCallback {
+            override fun onLocationResult(p0: LocationResult?) {
+                p0.locations.get(0).latitude
             }
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                mCategory = p0!!.getItemAtPosition(pos) as Category?
+            override fun onLocationAvailability(p0: LocationAvailability?) {
+                super.onLocationAvailability(p0)
             }
-        }
+
+        }, null)*/
 
 
-        propose_event.onClick(UI) {
-            val loggedInUser = Partner.mockCurrentUser()
-            mEventName = input_name.text.toString()
-            mLocationName = input_location_name.text.toString()
-            mCategory = categories_spinner.selectedItem as Category?
-            val proposedEvent = EventLV(
-                    mEventName!!,
-                    mCategory!!,
-                    mStartedDate.time,
-                    mDuration,
-                    mLocationName!!,
-                    mAddress!!,
-                    loggedInUser,
-                    emptyList(),
-                    EventLocationLatLng(48.883003, 2.316180)
-            )
-            mPresenter.persistEventLv(proposedEvent)
-        }
+
+        /*val client = Places.getGeoDataClient(this, null)
+        val predictions = client.getAutocompletePredictions("link", null,null)
+        predictions.addOnCompleteListener({
+            val res = it.result
+            res.forEach {
+                it.getFullText(null)
+            }
+        })
+        val place = client.getPlaceById("t", "t")
+        place.addOnCompleteListener({
+            val res = it.result
+            res.get(0).latLng
+        })*/
 
         googleApiClient = GoogleApiClient.Builder(this@NewEventLvActivity)
                 .enableAutoManage(this /* FragmentActivity */,
@@ -144,7 +174,6 @@ class NewEventLvActivity : AppCompatActivity(),
         super.onStart()
     }
 
-
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
         super.onDestroy()
@@ -153,6 +182,72 @@ class NewEventLvActivity : AppCompatActivity(),
     override fun onStop() {
         googleApiClient.disconnect()
         super.onStop()
+    }
+
+    private fun onClickedSave() {
+        propose_event.onClick(UI) {
+            val isValid = validateEventLv()
+            if (isValid) {
+                //saveEventLv()
+            }
+
+        }
+    }
+
+    private fun saveEventLv() {
+        val loggedInUser = Partner.mockCurrentUser()
+        mEventName = input_name.text.toString()
+        mLocationName = input_location_name.text.toString()
+        mCategory = categories_spinner.selectedItem as Category?
+        val proposedEvent = EventLV(
+                mEventName!!,
+                mCategory!!,
+                mStartedDate.time,
+                mDuration,
+                mLocationName!!,
+                mAddress!!,
+                loggedInUser,
+                emptyList(),
+                mLatLng
+        )
+        mPresenter.persistEventLv(proposedEvent)
+    }
+
+    private fun validateEventLv(): Boolean {
+        var isValid = true
+        val formFields = listOf<View>(input_name, categories_spinner, input_address, input_location_name, input_date, input_time, event_duration)
+        formFields.forEach {
+            when(it) {
+                is EditText -> {
+                    val t = it.text
+                    if (it.text == null) {
+                        it.error = getString(R.string.required_field_error_message)
+                        isValid = false
+                    }
+                }
+                is TextView -> {
+                    if (it.text == null) {
+                        it.error = getString(R.string.required_field_error_message)
+                        isValid = false
+                    }
+                }
+                is Spinner -> {
+                    if (it.selectedItem == null) {
+                        Toast.makeText(this@NewEventLvActivity, getString(R.string.form_fiels_all_required_message), Toast.LENGTH_LONG).show()
+                        isValid = false
+                    }
+                }
+            }
+        }
+
+        return isValid
+    }
+
+    private fun displayDatePicker() {
+        event_date.onClick {
+            val datePickerFragment = DatePickerDialogFragment.newInstance(Date())
+            datePickerFragment.show(supportFragmentManager, "date")
+        }
     }
 
     @Subscribe()
@@ -164,6 +259,13 @@ class NewEventLvActivity : AppCompatActivity(),
         mStartedDate.set(startedDate.get(YEAR), startedDate.get(MONTH), startedDate.get(DAY_OF_MONTH))
     }
 
+    private fun displayTimePicker() {
+        event_time.onClick {
+            val timePickerFragment = TimePickerDialogFragment.newInstance(Date())
+            timePickerFragment.show(supportFragmentManager, "time")
+        }
+    }
+
     @Subscribe()
     fun onTimePicked(event: PostTimeEvent) {
         val df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.FRANCE)
@@ -172,6 +274,29 @@ class NewEventLvActivity : AppCompatActivity(),
         startedTime.time = event.date
         mStartedDate.set(HOUR_OF_DAY, startedTime.get(HOUR_OF_DAY))
         mStartedDate.set(MINUTE, startedTime.get(MINUTE))
+    }
+
+    private fun updateDurationOnChange() {
+        input_duration.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(p0: SeekBar?, progress: Int, p2: Boolean) {
+                event_duration.text = resources.getString(R.string.duration_input_value, progress)
+                mDuration = progress
+            }
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+        })
+    }
+
+    private fun updateCategoryOnChange() {
+        categories_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(spinner: AdapterView<*>?) {
+                spinner?.getItemAtPosition(0)
+            }
+
+            override fun onItemSelected(spinner: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                mCategory = spinner?.getItemAtPosition(pos) as Category?
+            }
+        }
     }
 
 
@@ -225,7 +350,9 @@ class NewEventLvActivity : AppCompatActivity(),
             val address = adapter.getItem(position)
             input_location_name.text = Editable.Factory.getInstance().newEditable(address.name)
             launch(UI) {
-                mAddress = autoComplete.getPreciseAddress(address)
+                mAddress = autoComplete.getPreciseAddress(address).first
+                val latLng = autoComplete.getPreciseAddress(address).second
+                mLatLng = EventLocationLatLng(latLng.latitude, latLng.longitude)
             }
         }
     }

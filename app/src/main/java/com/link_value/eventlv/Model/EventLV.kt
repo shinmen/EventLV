@@ -51,7 +51,7 @@ class EventLV : Parcelable {
 
     @SerializedName("event_coordinates")
     @Expose
-    var coordinates: EventLocationLatLng
+    var coordinates: EventLocationLatLng?
 
     var locationStreetPictureUrl: String? = null
 
@@ -64,7 +64,7 @@ class EventLV : Parcelable {
             address: String,
             initiator: Partner,
             participants: List<Partner>,
-            coordinates: EventLocationLatLng
+            coordinates: EventLocationLatLng?
     ) {
         this.uuid = UUID.randomUUID().toString()
         this.title = title
