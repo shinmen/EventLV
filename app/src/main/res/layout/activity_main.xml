@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/root"
     tools:context="com.link_value.eventlv.View.ListEvent.MainActivity">
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,22 +16,9 @@
         tools:context="com.link_value.eventlv.View.ListEvent.MainActivity"
         android:id="@+id/list_container">
 
-    </android.support.constraint.ConstraintLayout>
-    <android.support.v4.widget.ContentLoadingProgressBar
-        android:id="@+id/loading_list"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:indeterminate="true"/>
+        <include layout="@layout/loading"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_propose_event"
-        android:transitionName="@string/transition_add_btn"
-        />
+    </android.support.constraint.ConstraintLayout>
+    <include layout="@layout/small_floating_bottom_end"/>
+
 </FrameLayout>

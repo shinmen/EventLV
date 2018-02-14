@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.link_value.eventlv.View.EventLvFragment"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="com.link_value.eventlv.View.ListEvent.EventLvFragment"
-    tools:listitem="@layout/fragment_eventlv"
-    />
+    android:id="@+id/root"
+    >
+    <include layout="@layout/loading"/>
+    <include layout="@layout/content_list"/>
+
+</FrameLayout>
+

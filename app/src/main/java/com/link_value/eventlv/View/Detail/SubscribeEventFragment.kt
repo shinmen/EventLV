@@ -57,6 +57,7 @@ class SubscribeEventFragment: Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retainInstance = true
         if (arguments != null) {
             mEventDetail = arguments!!.getParcelable(EVENT_LV) as EventLV
             mParticipants = mEventDetail.participants

@@ -15,6 +15,10 @@ class ListEventPresenterImpl(
         private val mCategoriesRepo: ListCategoryRepository
     ): ListEventPresenter {
 
+    override fun waitForList() {
+        mListEventView.displayLoading()
+    }
+
     override fun start() {
         mListRepo.queryComingEvents(mListEventView)
         mCategoriesRepo.queryCategories(mListCategoryView)

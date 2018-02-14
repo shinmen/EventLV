@@ -6,82 +6,103 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/text_margin"
-    android:layout_weight="0.5"
+    android:layout_weight="0.3"
     android:orientation="vertical">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="35dp" />
 
     <TextView
         android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        android:layout_marginTop="@dimen/text_margin"
+        android:text="évènement"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="parent"
-        android:text="évènement" />
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_text" />
+
     <TextView
         android:id="@+id/event_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/event_name"
-        android:text="début" />
+        android:layout_marginTop="@dimen/text_margin"
+        android:drawablePadding="@dimen/sm_margin"
+        android:drawableStart="@android:drawable/ic_dialog_info"
+        android:drawableTint="@color/colorPrimary"
+        android:gravity="center"
+        android:text="début"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/event_name" />
+
     <TextView
         android:id="@+id/event_location_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/event_time"
-        android:text="lieu" />
+        android:layout_marginTop="@dimen/text_margin"
+        android:drawablePadding="@dimen/sm_margin"
+        android:drawableStart="@android:drawable/ic_dialog_map"
+        android:drawableTint="@color/colorPrimary"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:text="lieu"
+        app:layout_constraintTop_toBottomOf="@+id/event_time" />
+
     <TextView
         android:id="@+id/event_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/event_location_name"
-        android:text="addresse" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline_initiator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="120dp" />
+        android:drawablePadding="@dimen/sm_margin"
+        android:drawableStart="@android:drawable/ic_dialog_map"
+        android:drawableTint="@android:color/transparent"
+        android:textSize="15sp"
+        android:text="addresse"
+        app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
     <TextView
         android:id="@+id/event_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_smooth"
+        android:padding="@dimen/sm_padding"
+        android:text="catégorie"
         android:textColor="@color/colorTextOverlay"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/guideline_initiator"
-        android:layout_margin="@dimen/text_margin"
-        android:padding="@dimen/sm_padding"
-        android:text="catégorie" />
+        app:layout_constraintRight_toRightOf="parent" />
+
     <TextView
         android:id="@+id/event_initiator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/guideline_initiator"
-        app:layout_constraintTop_toBottomOf="@+id/event_category"
+        android:layout_margin="@dimen/md_padding"
         android:text="@string/proposed_by"
-        android:paddingRight="@dimen/md_padding"
-        />
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/initiator_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/event_category"
+        android:layout_margin="8dp"
         app:layout_constraintLeft_toRightOf="@+id/event_initiator"
-        />
+        tools:src="@drawable/ic_menu_gallery" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/partner_avatar_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_address"
-        app:layout_constraintHorizontal_bias="0.5"
         tools:listitem="@layout/fragment_partner_avatar" />
 
     <ImageButton

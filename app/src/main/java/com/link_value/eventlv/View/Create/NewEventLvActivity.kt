@@ -92,75 +92,6 @@ class NewEventLvActivity : AppCompatActivity(),
         updateCategoryOnChange()
         onClickedSave()
 
-        val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        /*val loc = mFusedLocationClient.lastLocation
-        loc.addOnSuccessListener {
-            it.latitude
-        }*/
-
-        val mLocationRequest = LocationRequest()
-        mLocationRequest.setInterval(10000)
-        mLocationRequest.setFastestInterval(5000)
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest)
-        val client = LocationServices.getSettingsClient(this)
-        val task = client.checkLocationSettings(builder.build())
-
-        task.addOnSuccessListener(this, OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            fun onSuccess(locationSettingsResponse: LocationSettingsResponse) {
-                // All location settings are satisfied. The client can initialize
-                // location requests here.
-                // ...
-            }
-        })
-
-        task.addOnFailureListener(this, OnFailureListener() {
-            @Override
-            fun onFailure(e: Exception) {
-                if (e is ResolvableApiException) {
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    try {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        val resolvable = e
-                        /*resolvable.startResolutionForResult(this,
-                                REQUEST_CHECK_SETTINGS)*/
-                    } catch (sendEx: IntentSender.SendIntentException ) {
-                        // Ignore the error.
-                    }
-                }
-            }
-        })
-
-/*        mFusedLocationClient.requestLocationUpdates(mLocationRequest, object: LocationCallback {
-            override fun onLocationResult(p0: LocationResult?) {
-                p0.locations.get(0).latitude
-            }
-
-            override fun onLocationAvailability(p0: LocationAvailability?) {
-                super.onLocationAvailability(p0)
-            }
-
-        }, null)*/
-
-
-
-        /*val client = Places.getGeoDataClient(this, null)
-        val predictions = client.getAutocompletePredictions("link", null,null)
-        predictions.addOnCompleteListener({
-            val res = it.result
-            res.forEach {
-                it.getFullText(null)
-            }
-        })
-        val place = client.getPlaceById("t", "t")
-        place.addOnCompleteListener({
-            val res = it.result
-            res.get(0).latLng
-        })*/
-
         googleApiClient = GoogleApiClient.Builder(this@NewEventLvActivity)
                 .enableAutoManage(this /* FragmentActivity */,
                         this /* OnConnectionFailedListener */)
@@ -219,14 +150,13 @@ class NewEventLvActivity : AppCompatActivity(),
         formFields.forEach {
             when(it) {
                 is EditText -> {
-                    val t = it.text
-                    if (it.text == null) {
+                    if (it.text.isEmpty()) {
                         it.error = getString(R.string.required_field_error_message)
                         isValid = false
                     }
                 }
                 is TextView -> {
-                    if (it.text == null) {
+                    if (it.text.isEmpty()) {
                         it.error = getString(R.string.required_field_error_message)
                         isValid = false
                     }

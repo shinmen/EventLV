@@ -32,7 +32,7 @@ class ListCategoryTabFragment : Fragment(),
     }
 
     override fun onErrorCategoryFetch(error: String?) {
-        Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, getString(R.string.error_list_category), Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

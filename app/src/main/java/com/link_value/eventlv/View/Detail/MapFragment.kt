@@ -39,6 +39,7 @@ class MapFragment : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retainInstance = true
         if (arguments != null) {
             mEventDetail = arguments!!.getParcelable(MapFragment.EVENT_LV) as EventLV
         }

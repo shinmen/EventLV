@@ -27,8 +27,11 @@ class ListEventRepositoryImpl(
                 list.forEach({
                     it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
                 })
-
-                listener.onEventsFetched(list)
+                if (list.isEmpty()) {
+                    listener.onEmptyEvents()
+                } else {
+                    listener.onEventsFetched(list)
+                }
             } catch (ex: Exception) {
                 listener.onErrorEventsFetch(ex.message)
             }
