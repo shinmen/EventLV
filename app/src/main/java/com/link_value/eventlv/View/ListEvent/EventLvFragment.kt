@@ -2,7 +2,6 @@ package com.link_value.eventlv.View.ListEvent
 
 import android.os.Bundle
 import android.support.transition.*
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.support.v7.widget.LinearLayoutManager
@@ -11,64 +10,59 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.link_value.eventlv.Model.Event.DisplayEventLvDetail
-import com.link_value.eventlv.Model.Event.MoveToProposalEvent
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.ListPresenter.ListEventPresenterImpl
 import com.link_value.eventlv.R
-import com.link_value.eventlv.Model.Event.TabSelectedEvent
-import com.link_value.eventlv.View.Create.NewEventLvActivity
-import com.link_value.eventlv.View.Detail.DetailEventLvActivity
-import kotlinx.android.synthetic.main.fragment_eventlv_list.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
+import android.content.Context
+
 
 /**
  * Mandatory empty constructor for the fragment manager to instantiate the
  * fragment (e.g. upon screen orientation changes).
  */
-class EventLvFragment : Fragment(), ListEventView {
+class EventLvFragment : Fragment(),
+        ListEventView
+{
     private lateinit var mAdapter:EventLvListRecyclerViewAdapter
     lateinit var mPresenter: ListEventPresenterImpl
     private var tabSelected: String? = null
     private lateinit var mView: ViewGroup
     private lateinit var mListView: RecyclerView
     private lateinit var mLoadingView: ContentLoadingProgressBar
+    private var mListener: ListListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        EventBus.getDefault().register(this)
     }
 
-    override fun onDestroy() {
-        EventBus.getDefault().unregister(this)
-        super.onDestroy()
-    }
-
-    @Subscribe()
-    fun onDisplayDetail(ev: DisplayEventLvDetail) {
-        val i = DetailEventLvActivity.newIntent(activity!!, ev.eventLv)
-        startActivity(i)
-    }
-
-    @Subscribe
-    fun onTabSelected(ev: TabSelectedEvent) {
-        if (ev.category.name != tabSelected) {
-            tabSelected = ev.category.name
+    fun onTabSelected(category: Category) {
+        if (category.name != tabSelected) {
+            tabSelected = category.name
             if (tabSelected == resources.getString(R.string.all_types)) {
                 mPresenter.waitForList()
                 mPresenter.fetchAll()
             } else {
                 mPresenter.waitForList()
-                mPresenter.refreshWithCategory(ev.category.slug)
+                mPresenter.refreshWithCategory(category.slug)
             }
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mListener = activity as ListListener
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mListener = null
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_eventlv_list, container, false) as ViewGroup
-        mAdapter = EventLvListRecyclerViewAdapter(activity!!, emptyList())
+        mAdapter = EventLvListRecyclerViewAdapter(mListener!!, activity!!, mutableListOf())
         mListView = mView.findViewById(R.id.list)
         mLoadingView = mView.findViewById(R.id.loading)
         // Set the adapter
@@ -79,11 +73,17 @@ class EventLvFragment : Fragment(), ListEventView {
         return mView
     }
 
+    override fun newEvent(event: EventLV) {
+    }
+
+    override fun replaceEvent(event: EventLV) {
+        mAdapter.updateEvent(event)
+    }
+
     override fun onEmptyEvents() {
         TransitionManager.beginDelayedTransition(mView, Slide())
         mListView.visibility = View.GONE
         mLoadingView.visibility = View.GONE
-        EventBus.getDefault().post(MoveToProposalEvent())
     }
 
     override fun displayLoading() {
@@ -92,7 +92,7 @@ class EventLvFragment : Fragment(), ListEventView {
 
     override fun onEventsFetched(events: List<EventLV>) {
         TransitionManager.beginDelayedTransition(mView, Slide())
-        mAdapter.loadEvents(events)
+        mAdapter.loadEvents(events.toMutableList())
         mListView.visibility = View.VISIBLE
         mLoadingView.visibility = View.GONE
     }
@@ -109,5 +109,9 @@ class EventLvFragment : Fragment(), ListEventView {
 
             return fragment
         }
+    }
+
+    interface ListListener {
+        fun onDisplayDetail(view: View, event: EventLV)
     }
 }

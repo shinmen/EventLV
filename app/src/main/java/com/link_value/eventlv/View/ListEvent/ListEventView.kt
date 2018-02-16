@@ -10,4 +10,6 @@ interface ListEventView {
     fun onEmptyEvents()
     fun onEventsFetched(events :List<EventLV>)
     fun onErrorEventsFetch(error :String?)
+    fun newEvent(event: EventLV)
+    fun replaceEvent(event: EventLV)
 }

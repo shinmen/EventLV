@@ -16,8 +16,9 @@ import java.text.DateFormat
 import java.util.*
 
 class EventLvListRecyclerViewAdapter(
+        private val listener: EventLvFragment.ListListener,
         private val context: Context,
-        private var mValues: List<EventLV>
+        private var mValues: MutableList<EventLV>
     ) : RecyclerView.Adapter<EventLvListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,9 +26,19 @@ class EventLvListRecyclerViewAdapter(
         return ViewHolder(view)
     }
 
-    fun loadEvents(events: List<EventLV>) {
+    fun loadEvents(events: MutableList<EventLV>) {
         mValues = events
         notifyDataSetChanged()
+    }
+
+    fun updateEvent(event: EventLV) {
+        mValues.map {
+            if (it.uuid == event.uuid) {
+                val index = mValues.indexOf(it)
+                mValues[index] = event
+                notifyItemChanged(index)
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -46,7 +57,7 @@ class EventLvListRecyclerViewAdapter(
         holder.mStartTimeView.text = date
 
         holder.mView.setOnClickListener {
-            EventBus.getDefault().post(DisplayEventLvDetail(event))
+            listener.onDisplayDetail(it, event)
         }
     }
 

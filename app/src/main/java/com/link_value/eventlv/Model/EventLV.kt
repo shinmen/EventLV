@@ -15,7 +15,8 @@ class EventLV : Parcelable {
 
     @SerializedName("uuid")
     @Expose
-    private var uuid: String
+    var uuid: String
+    private set
 
     @SerializedName("title")
     @Expose
@@ -47,7 +48,7 @@ class EventLV : Parcelable {
 
     @SerializedName("participants")
     @Expose
-    var participants: List<Partner> = ArrayList()
+    var participants: MutableList<Partner> = ArrayList()
 
     @SerializedName("event_coordinates")
     @Expose
@@ -63,7 +64,7 @@ class EventLV : Parcelable {
             locationName: String,
             address: String,
             initiator: Partner,
-            participants: List<Partner>,
+            participants: MutableList<Partner>,
             coordinates: EventLocationLatLng?
     ) {
         this.uuid = UUID.randomUUID().toString()

@@ -53,6 +53,7 @@
         android:textSize="15sp"
         android:gravity="center"
         android:text="lieu"
+        android:transitionName="@string/transition_location_name"
         app:layout_constraintTop_toBottomOf="@+id/event_time" />
 
     <TextView

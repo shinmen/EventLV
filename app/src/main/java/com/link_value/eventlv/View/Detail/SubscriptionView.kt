@@ -5,6 +5,8 @@ package com.link_value.eventlv.View.Detail
  */
 interface SubscriptionView {
     fun onSubscribed()
-    fun onUnsubscribe()
-
+    fun onUnsubscribed()
+    fun onErrorSubscription()
+    fun hasAlreadySubscribed()
+    fun hasNotSubscribedYet()
 }

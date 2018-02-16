@@ -1,5 +1,6 @@
 package com.link_value.eventlv.Presenter.ListPresenter
 
+import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Repository.List.ListCategoryRepository
 import com.link_value.eventlv.Repository.List.ListEventRepository
 import com.link_value.eventlv.View.ListEvent.ListCategoryView
@@ -14,6 +15,14 @@ class ListEventPresenterImpl(
         private val mListRepo: ListEventRepository,
         private val mCategoriesRepo: ListCategoryRepository
     ): ListEventPresenter {
+
+    override fun updateParticipantEvent(event: EventLV) {
+        mListEventView.replaceEvent(event)
+    }
+
+    override fun addEvent(event: EventLV) {
+
+    }
 
     override fun waitForList() {
         mListEventView.displayLoading()

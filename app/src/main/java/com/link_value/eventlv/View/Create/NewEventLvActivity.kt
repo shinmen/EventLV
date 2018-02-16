@@ -119,7 +119,7 @@ class NewEventLvActivity : AppCompatActivity(),
         propose_event.onClick(UI) {
             val isValid = validateEventLv()
             if (isValid) {
-                //saveEventLv()
+                saveEventLv()
             }
 
         }
@@ -138,7 +138,7 @@ class NewEventLvActivity : AppCompatActivity(),
                 mLocationName!!,
                 mAddress!!,
                 loggedInUser,
-                emptyList(),
+                mutableListOf(),
                 mLatLng
         )
         mPresenter.persistEventLv(proposedEvent)

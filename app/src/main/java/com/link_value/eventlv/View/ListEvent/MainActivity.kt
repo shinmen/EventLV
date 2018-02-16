@@ -1,5 +1,9 @@
 package com.link_value.eventlv.View.ListEvent
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -19,13 +23,18 @@ import android.support.v4.view.GravityCompat
 import android.view.Gravity
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.WithHint
+import android.transition.Explode
 import android.widget.Toast
+import com.link_value.eventlv.Model.Category
+import com.link_value.eventlv.Model.EventLV
+import com.link_value.eventlv.View.Detail.DetailEventLvActivity
 import kotlinx.android.synthetic.main.small_floating_bottom_end.*
 import org.greenrobot.eventbus.EventBus
 
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity(),
+        EventLvFragment.ListListener
+    {
     private var mPresenter: ListEventPresenterImpl? = null
     private lateinit var mListEventFragment: EventLvFragment
     private lateinit var mListCategoryTabFragment: ListCategoryTabFragment
@@ -34,10 +43,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        EventBus.getDefault().register(this)
         mListEventFragment = EventLvFragment.newInstance()
         mListCategoryTabFragment = ListCategoryTabFragment.newInstance()
         mFabView = findViewById(R.id.fab)
+        val explode = Explode()
+        window.enterTransition = explode
 
         supportFragmentManager
                 .beginTransaction()
@@ -57,15 +67,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Subscribe()
-    fun onProposeEvent(event: MoveToProposalEvent) {
-        val lp = fab.layoutParams as CoordinatorLayout.LayoutParams
-        lp.anchorGravity = Gravity.CENTER_HORIZONTAL
-        lp.width = 50
-        lp.height = 50
-        mFabView.layoutParams = lp
-    }
-
     private fun initPresenter() {
         val streetViewBaseUrl = resources.getString(
                 R.string.streetview_picture_base_url,
@@ -81,9 +82,37 @@ class MainActivity : AppCompatActivity() {
         mPresenter!!.start()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == UPDATE_LIST_CODE) {
+            val eventLV = data?.extras?.get(EventLV.PARCEL_NAME) as EventLV
+            mPresenter!!.updateParticipantEvent(eventLV)
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onDisplayDetail(view: View, event: EventLV) {
+        val i = DetailEventLvActivity.newIntent(this, event)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view, resources.getString(R.string.transition_add_btn))
+        startActivityForResult(i, UPDATE_LIST_CODE, options.toBundle())
+    }
+
+/*    override fun onTabSelected(category: Category) {
+        //To change body of created functions use File | Settings | File Templates.
+    }*/
+
     override fun onDestroy() {
         mPresenter = null
-        EventBus.getDefault().unregister(this)
         super.onDestroy()
+    }
+
+    companion object {
+        const val UPDATE_LIST_CODE = 42
+        fun newIntent(packageContext: Context, event: EventLV): Intent {
+            val intent = Intent(packageContext, MainActivity::class.java)
+            intent.putExtra(EventLV.PARCEL_NAME, event)
+
+            return intent
+        }
     }
 }

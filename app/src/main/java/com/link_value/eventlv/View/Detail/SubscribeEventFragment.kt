@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Model.Partner
 import com.link_value.eventlv.R
-import kotlinx.android.synthetic.main.fragment_subscribe_event.*
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.LinearLayout.HORIZONTAL
@@ -17,6 +16,7 @@ import android.support.v4.content.ContextCompat
 import android.view.*
 import android.widget.*
 import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenter
+import kotlinx.android.synthetic.main.fragment_subscribe_event.*
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.imageResource
 import java.text.DateFormat
@@ -29,19 +29,10 @@ import java.util.*
 class SubscribeEventFragment: Fragment(),
         SubscriptionView
 {
-    override fun onSubscribed() {
-        mPartnerIsParticipating = true
-        btnOnParticipatingStatus(mPartnerIsParticipating)
-    }
-
-    override fun onUnsubscribe() {
-        mPartnerIsParticipating = false
-        btnOnParticipatingStatus(mPartnerIsParticipating)
-    }
-
     lateinit var mPresenter: DetailPresenter
+    private lateinit var mLoggedInPartner: Partner
     private lateinit var mEventDetail: EventLV
-    private lateinit var mParticipants: List<Partner>
+    private lateinit var mParticipants: MutableList<Partner>
     private lateinit var mInitiator: Partner
     private var mPartnerIsParticipating: Boolean = false
     private lateinit var mRecyclerViewAdapter: PartnerAvatarRecyclerViewAdapter
@@ -79,9 +70,13 @@ class SubscribeEventFragment: Fragment(),
         val partnerListView = view.findViewById<RecyclerView>(R.id.partner_avatar_list)
 
         val layoutManager = LinearLayoutManager(activity, HORIZONTAL, false)
-        mRecyclerViewAdapter = PartnerAvatarRecyclerViewAdapter(activity!!, mParticipants.toMutableList())
+        mRecyclerViewAdapter = PartnerAvatarRecyclerViewAdapter(
+                activity!!, mParticipants.toMutableList()
+        )
         partnerListView.layoutManager = layoutManager
         partnerListView.adapter = mRecyclerViewAdapter
+
+        mLoggedInPartner = MockLoggedInPartner.loggedInPartner
 
         picasso = Picasso.with(context)
         picasso.setIndicatorsEnabled(false)
@@ -89,7 +84,7 @@ class SubscribeEventFragment: Fragment(),
         loadInitiator()
         hydrateEvent()
 
-        mPresenter.isLoggedInUserParticipating(this)
+        mPresenter.isLoggedInUserParticipating(mParticipants, mLoggedInPartner,this)
 
         partnerOnClick()
 
@@ -100,14 +95,16 @@ class SubscribeEventFragment: Fragment(),
         mEventAddressView.text = mEventDetail.address
         mEventNameView.text = mEventDetail.title
         mEventLocationNameView.text = mEventDetail.locationName
-        val date = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault()).format(mEventDetail.startedAt)
+        val date = DateFormat
+                .getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault())
+                .format(mEventDetail.startedAt)
         mEventTimeView.text = date
         mEventCategoryView.text = mEventDetail.category.name
     }
 
     private fun loadLoggedInPartner() {
         picasso
-            .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
+            .load(mLoggedInPartner.avatarUrl)
             .placeholder(android.R.drawable.picture_frame)
             .fit()
             .into(participatingBtnView, object : com.squareup.picasso.Callback {
@@ -130,6 +127,11 @@ class SubscribeEventFragment: Fragment(),
         participatingBtnView.onClick {
             participate_btn.setOnClickListener({
                 mPartnerIsParticipating = !mPartnerIsParticipating
+                if (mPartnerIsParticipating) {
+                    mPresenter.subscribeToEvent(mEventDetail, mLoggedInPartner)
+                } else {
+                    mPresenter.unsubscribeToEvent(mEventDetail, mLoggedInPartner)
+                }
                 val bounds = ChangeBounds()
                 bounds.duration = 500
                 TransitionManager.beginDelayedTransition(mRootView, bounds)
@@ -140,17 +142,43 @@ class SubscribeEventFragment: Fragment(),
 
     private fun btnOnParticipatingStatus(isParticipating: Boolean) {
         if (isParticipating) {
-            mRecyclerViewAdapter.addParticipant(MockLoggedInPartner.loggedInPartner)
             participatingBtnView.imageResource = android.R.color.transparent
             participatingBtnView.backgroundTintList = ContextCompat.getColorStateList(activity!!, R.color.colorPrimaryDark)
         } else {
             picasso
-                .load(MockLoggedInPartner.loggedInPartner.avatarUrl)
+                .load(mLoggedInPartner.avatarUrl)
                 .placeholder(android.R.drawable.picture_frame)
                 .fit()
                 .into(participatingBtnView)
-            mRecyclerViewAdapter.removeParticipant(MockLoggedInPartner.loggedInPartner)
         }
+    }
+
+    override fun hasAlreadySubscribed() {
+        mPartnerIsParticipating = true
+        btnOnParticipatingStatus(mPartnerIsParticipating)
+    }
+
+    override fun hasNotSubscribedYet() {
+        mPartnerIsParticipating = false
+        btnOnParticipatingStatus(mPartnerIsParticipating)
+    }
+
+    override fun onErrorSubscription() {
+        Toast.makeText(activity, getString(R.string.error_subscription), Toast.LENGTH_LONG).show()
+    }
+
+    override fun onSubscribed() {
+        mPartnerIsParticipating = true
+        mRecyclerViewAdapter.addParticipant(mLoggedInPartner)
+        mParticipants.add(mLoggedInPartner)
+        btnOnParticipatingStatus(mPartnerIsParticipating)
+    }
+
+    override fun onUnsubscribed() {
+        mPartnerIsParticipating = false
+        mRecyclerViewAdapter.removeParticipant(mLoggedInPartner)
+        mParticipants.remove(mLoggedInPartner)
+        btnOnParticipatingStatus(mPartnerIsParticipating)
     }
 
     companion object {

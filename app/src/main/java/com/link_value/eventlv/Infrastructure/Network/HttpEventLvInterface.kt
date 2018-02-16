@@ -24,4 +24,10 @@ interface HttpEventLvInterface {
 
     @GET("eventlv/category/list")
     fun getCategories(): Call<List<Category>>
+
+    @POST("eventlv/subscribe/{uuid}/{username}")
+    fun subscribeEvent(@Path("uuid") uuid: String, @Path("username") username: String): Call<Any>
+
+    @POST("eventlv/unsubscribe/{uuid}/{username}")
+    fun unSubscribeEvent(@Path("uuid") uuid: String, @Path("username") username: String): Call<Any>
 }

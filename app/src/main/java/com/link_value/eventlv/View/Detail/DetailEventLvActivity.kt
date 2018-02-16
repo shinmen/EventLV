@@ -1,30 +1,32 @@
 package com.link_value.eventlv.View.Detail
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
 import android.transition.Explode
-import android.transition.Slide
-import android.view.Window
+import com.link_value.eventlv.Infrastructure.Network.HttpClient
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenter
 import com.link_value.eventlv.Presenter.DetailPresenter.DetailPresenterImpl
 import com.link_value.eventlv.R
+import com.link_value.eventlv.Repository.Subscription.SubscriptionRepositoryImpl
+import com.link_value.eventlv.View.ListEvent.MainActivity
 
 class DetailEventLvActivity : AppCompatActivity()
 {
     private lateinit var mPresenter: DetailPresenter
+    private lateinit var mEvent: EventLV
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_event_lv)
         val bundle = intent.extras
-        val event = bundle.getParcelable(EventLV.PARCEL_NAME) as EventLV
+        mEvent = bundle.getParcelable(EventLV.PARCEL_NAME) as EventLV
 
-        val detailEventValueFragment = SubscribeEventFragment.newInstance(event)
-        val mapEventFragment = MapFragment.newInstance(event)
+        val detailEventValueFragment = SubscribeEventFragment.newInstance(mEvent)
+        val mapEventFragment = MapFragment.newInstance(mEvent)
         val explode = Explode()
         window.enterTransition = explode
 
@@ -34,11 +36,18 @@ class DetailEventLvActivity : AppCompatActivity()
                 .add(R.id.detail_container, mapEventFragment)
                 .add(R.id.detail_container, detailEventValueFragment)
                 .commit()
-
-        mPresenter = DetailPresenterImpl(detailEventValueFragment)
+        val subscriptionRepo = SubscriptionRepositoryImpl(HttpClient())
+        mPresenter = DetailPresenterImpl(detailEventValueFragment, subscriptionRepo)
 
         detailEventValueFragment.mPresenter = mPresenter
         mPresenter.start()
+    }
+
+    override fun onBackPressed() {
+        val i = MainActivity.newIntent(this, mEvent)
+        setResult(Activity.RESULT_OK, i)
+        finish()
+        super.onBackPressed()
     }
 
     companion object {
