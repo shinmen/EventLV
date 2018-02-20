@@ -55,6 +55,7 @@ class EventLvListRecyclerViewAdapter(
         val startedAt = event.startedAt
         val date = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault()).format(startedAt)
         holder.mStartTimeView.text = date
+        holder.mParticipantsNbView.text = context.resources.getString(R.string.participants_nb, event.participants.size.toString())
 
         holder.mView.setOnClickListener {
             listener.onDisplayDetail(it, event)
@@ -71,6 +72,7 @@ class EventLvListRecyclerViewAdapter(
         val mLocationName: TextView = mView.findViewById(R.id.location_name)
         val mTitleView: TextView = mView.findViewById(R.id.title)
         val mStartTimeView: TextView = mView.findViewById(R.id.start_time)
+        val mParticipantsNbView: TextView = mView.findViewById(R.id.participant_nb)
 
         override fun toString(): String {
             return super.toString() + " '" + mTitleView.text + "'"

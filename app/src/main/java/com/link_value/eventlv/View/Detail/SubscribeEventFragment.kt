@@ -45,6 +45,7 @@ class SubscribeEventFragment: Fragment(),
     private lateinit var mEventTimeView: TextView
     private lateinit var mEventLocationNameView: TextView
     private lateinit var mEventCategoryView: TextView
+    private lateinit var mSubscriptionListener: SubcriptionListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +69,7 @@ class SubscribeEventFragment: Fragment(),
         mEventLocationNameView = view.findViewById(R.id.event_location_name)
         mEventCategoryView = view.findViewById(R.id.event_category)
         val partnerListView = view.findViewById<RecyclerView>(R.id.partner_avatar_list)
+        mSubscriptionListener = activity as SubcriptionListener
 
         val layoutManager = LinearLayoutManager(activity, HORIZONTAL, false)
         mRecyclerViewAdapter = PartnerAvatarRecyclerViewAdapter(
@@ -80,7 +82,7 @@ class SubscribeEventFragment: Fragment(),
 
         picasso = Picasso.with(context)
         picasso.setIndicatorsEnabled(false)
-        loadLoggedInPartner()
+        drawLoggedInPartner()
         loadInitiator()
         hydrateEvent()
 
@@ -102,7 +104,7 @@ class SubscribeEventFragment: Fragment(),
         mEventCategoryView.text = mEventDetail.category.name
     }
 
-    private fun loadLoggedInPartner() {
+    private fun drawLoggedInPartner() {
         picasso
             .load(mLoggedInPartner.avatarUrl)
             .placeholder(android.R.drawable.picture_frame)
@@ -172,6 +174,7 @@ class SubscribeEventFragment: Fragment(),
         mRecyclerViewAdapter.addParticipant(mLoggedInPartner)
         mParticipants.add(mLoggedInPartner)
         btnOnParticipatingStatus(mPartnerIsParticipating)
+        mSubscriptionListener.onSubscriptionStatusChanged(mEventDetail)
     }
 
     override fun onUnsubscribed() {
@@ -179,6 +182,7 @@ class SubscribeEventFragment: Fragment(),
         mRecyclerViewAdapter.removeParticipant(mLoggedInPartner)
         mParticipants.remove(mLoggedInPartner)
         btnOnParticipatingStatus(mPartnerIsParticipating)
+        mSubscriptionListener.onSubscriptionStatusChanged(mEventDetail)
     }
 
     companion object {
@@ -192,6 +196,9 @@ class SubscribeEventFragment: Fragment(),
 
             return fragment
         }
+    }
 
+    interface SubcriptionListener {
+        fun onSubscriptionStatusChanged(event: EventLV)
     }
 }

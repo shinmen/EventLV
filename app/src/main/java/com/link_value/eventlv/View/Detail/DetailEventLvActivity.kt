@@ -14,7 +14,8 @@ import com.link_value.eventlv.R
 import com.link_value.eventlv.Repository.Subscription.SubscriptionRepositoryImpl
 import com.link_value.eventlv.View.ListEvent.MainActivity
 
-class DetailEventLvActivity : AppCompatActivity()
+class DetailEventLvActivity : AppCompatActivity(),
+        SubscribeEventFragment.SubcriptionListener
 {
     private lateinit var mPresenter: DetailPresenter
     private lateinit var mEvent: EventLV
@@ -48,6 +49,10 @@ class DetailEventLvActivity : AppCompatActivity()
         setResult(Activity.RESULT_OK, i)
         finish()
         super.onBackPressed()
+    }
+
+    override fun onSubscriptionStatusChanged(event: EventLV) {
+        mEvent = event
     }
 
     companion object {
