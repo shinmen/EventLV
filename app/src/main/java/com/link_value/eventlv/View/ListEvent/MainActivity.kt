@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(),
         mFabView = findViewById(R.id.fab)
         val explode = Explode()
         window.enterTransition = explode
+        window.exitTransition = explode
 
         supportFragmentManager
                 .beginTransaction()

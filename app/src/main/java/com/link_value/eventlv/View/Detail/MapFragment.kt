@@ -23,18 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapFragment : Fragment(),
         OnMapReadyCallback
 {
-    override fun onMapReady(map: GoogleMap?) {
-        val marker = MarkerOptions()
-        if (mEventDetail.coordinates != null) {
-            marker.title(mEventDetail.locationName)
-            val eventLatLng = LatLng(mEventDetail.coordinates!!.lat, mEventDetail.coordinates!!.lng)
-            marker.position(eventLatLng)
-            map?.addMarker(marker)
-            map?.moveCamera(CameraUpdateFactory.newLatLng(eventLatLng))
-            map?.moveCamera(CameraUpdateFactory.zoomTo(12.toFloat()))
-        }
-    }
-
     private lateinit var mEventDetail: EventLV
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +43,19 @@ class MapFragment : Fragment(),
         mapView.onResume() // needed to get the map to display immediately
         mapView.getMapAsync(this)
 
-
         return view
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        val marker = MarkerOptions()
+        if (mEventDetail.coordinates != null) {
+            marker.title(mEventDetail.locationName)
+            val eventLatLng = LatLng(mEventDetail.coordinates!!.lat, mEventDetail.coordinates!!.lng)
+            marker.position(eventLatLng)
+            map?.addMarker(marker)
+            map?.moveCamera(CameraUpdateFactory.zoomTo(12.toFloat()))
+            map?.moveCamera(CameraUpdateFactory.newLatLng(eventLatLng))
+        }
     }
 
     companion object {

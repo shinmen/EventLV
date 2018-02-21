@@ -41,9 +41,12 @@ class PartnerAvatarRecyclerViewAdapter
     }
 
     fun removeParticipant(loggedInPartner: Partner) {
-        if (participants.contains(loggedInPartner)) {
-            participants.removeAt(0)
-            notifyItemRemoved(0)
+        participants.map {
+            if (it.username == loggedInPartner.username) {
+                val index = participants.indexOf(it)
+                participants.removeAt(index)
+                notifyItemRemoved(index)
+            }
         }
     }
 

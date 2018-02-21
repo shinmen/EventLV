@@ -25,6 +25,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
+        android:transitionName="@string/transition_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline_text" />
@@ -53,7 +54,6 @@
         android:textSize="15sp"
         android:gravity="center"
         android:text="lieu"
-        android:transitionName="@string/transition_location_name"
         app:layout_constraintTop_toBottomOf="@+id/event_time" />
 
     <TextView
@@ -108,13 +108,12 @@
 
     <ImageButton
         android:id="@+id/participate_btn"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_marginTop="45dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/partner_avatar_list" />
-
 </android.support.constraint.ConstraintLayout>

@@ -74,6 +74,7 @@ class NewEventLvActivity : AppCompatActivity(),
         EventBus.getDefault().register(this)
         val explode = Explode()
         window.enterTransition = explode
+        window.exitTransition = explode
 
         askForUserLocation()
         val newRepo = NewEventRepositoryImpl(HttpClient())
@@ -259,7 +260,7 @@ class NewEventLvActivity : AppCompatActivity(),
         adapter = AutoCompleteAddressAdapter(this@NewEventLvActivity, android.R.layout.simple_list_item_1)
         event_duration.text = resources.getString(R.string.duration_input_value, 1)
         input_address.setAdapter(adapter)
-        input_address.threshold = 4
+        //input_address.threshold = 4
         input_address.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}

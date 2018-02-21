@@ -30,13 +30,15 @@
     <string name="refuse_location_permission">Les bureaux d\'LV Paris sont pris en compte comme position d\'origine de l\'autocomplete d\'adresse</string>
     <string name="error_google_api_connection">impossible de se connecter</string>
     <string name="error_list_categories">Désolé une erreur s\'est produite durant la récupération des catégories</string>
-    <string name="participants_nb">%1$s partners inscrits</string>
+    <string name="participants_nb">%1$s partner(s) participe(nt)</string>
+    <string name="meet_at">RDV à %1$s</string>
+    <string name="start_at">Le %1$s</string>
 
     <string name="proposed_by">Proposé par</string>
     <string name="required_field_error_message">Ce champs est obligatoire</string>
     <string name="form_fiels_all_required_message">Tous les champs sont nécessaires</string>
     <string name="error_list_category">une erreur est survenue lors de l\'affichage des catégories</string>
     <string name="error_subscription">Désolé, nous n\'avons pas sauvegarder votre modification d\'inscription</string>
-    <string name="transition_location_name">locationName</string>
+    <string name="transition_title">title</string>
 
 </resources>

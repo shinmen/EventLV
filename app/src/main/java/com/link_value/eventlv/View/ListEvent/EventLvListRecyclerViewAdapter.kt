@@ -49,12 +49,12 @@ class EventLvListRecyclerViewAdapter(
                 .centerCrop()
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .into(holder.mLocationPictureView)
-        holder.mLocationName.text = event.locationName
+        holder.mLocationName.text = context.resources.getString(R.string.meet_at, event.locationName)
         holder.mTitleView.text = event.title
         holder.mCategoryView.text = event.category.toString()
         val startedAt = event.startedAt
         val date = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.getDefault()).format(startedAt)
-        holder.mStartTimeView.text = date
+        holder.mStartTimeView.text = context.resources.getString(R.string.start_at, date)
         holder.mParticipantsNbView.text = context.resources.getString(R.string.participants_nb, event.participants.size.toString())
 
         holder.mView.setOnClickListener {

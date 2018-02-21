@@ -86,7 +86,7 @@ class SubscribeEventFragment: Fragment(),
         loadInitiator()
         hydrateEvent()
 
-        mPresenter.isLoggedInUserParticipating(mParticipants, mLoggedInPartner,this)
+        mPresenter.isLoggedInUserParticipating(mParticipants.toMutableList(), mLoggedInPartner,this)
 
         partnerOnClick()
 
@@ -171,16 +171,17 @@ class SubscribeEventFragment: Fragment(),
 
     override fun onSubscribed() {
         mPartnerIsParticipating = true
-        mRecyclerViewAdapter.addParticipant(mLoggedInPartner)
         mParticipants.add(mLoggedInPartner)
+        mRecyclerViewAdapter.addParticipant(mLoggedInPartner)
         btnOnParticipatingStatus(mPartnerIsParticipating)
         mSubscriptionListener.onSubscriptionStatusChanged(mEventDetail)
     }
 
     override fun onUnsubscribed() {
         mPartnerIsParticipating = false
+        val partner = mParticipants.filter { it.username == mLoggedInPartner.username }
+        mParticipants.remove(partner.first())
         mRecyclerViewAdapter.removeParticipant(mLoggedInPartner)
-        mParticipants.remove(mLoggedInPartner)
         btnOnParticipatingStatus(mPartnerIsParticipating)
         mSubscriptionListener.onSubscriptionStatusChanged(mEventDetail)
     }

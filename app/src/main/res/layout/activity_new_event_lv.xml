@@ -14,15 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/lg_padding"
+        android:hint="@string/label_event_name"
         app:layout_constraintTop_toBottomOf="parent">
-
         <EditText
             android:id="@+id/input_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/label_event_name"
-
             />
     </android.support.design.widget.TextInputLayout>
     <TextView
@@ -52,13 +50,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/lg_padding"
+        android:hint="@string/label_event_address"
         app:layout_constraintTop_toBottomOf="@+id/category_label"
         >
         <AutoCompleteTextView
             android:id="@+id/input_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/label_event_address" />
+            />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,14 +70,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/lg_padding"
+        android:hint="@string/label_location_name"
         app:layout_constraintTop_toBottomOf="@+id/event_address">
 
         <EditText
             android:id="@+id/input_location_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/label_location_name"
-
             />
     </android.support.design.widget.TextInputLayout>
 
@@ -88,8 +86,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
+        android:gravity="center_vertical"
         android:padding="@dimen/lg_padding"
-        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
         android:text="@string/label_event_date"
         android:textSize="@dimen/md_text"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,8 +99,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
-        android:ems="8"
+        android:ems="6"
+        android:gravity="center_vertical|start"
         android:padding="@dimen/lg_padding"
+        android:textSize="@dimen/md_text"
         app:layout_constraintStart_toEndOf="@+id/event_date"
         app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
@@ -110,8 +111,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
+        android:gravity="center_vertical"
         android:padding="@dimen/lg_padding"
-        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
         android:text="@string/label_event_time"
         android:textSize="@dimen/md_text"
         app:layout_constraintLeft_toRightOf="@+id/input_date"
@@ -122,9 +124,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
-        android:ems="5"
+        android:ems="4"
+        android:gravity="center_vertical|start"
         android:padding="@dimen/lg_padding"
-        android:paddingLeft="@dimen/md_padding"
+        android:textSize="@dimen/md_text"
         app:layout_constraintStart_toEndOf="@+id/event_time"
         app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
@@ -144,7 +147,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:layout_marginTop="32dp"
-        android:max="12"
+        android:max="48"
         android:progress="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/event_duration"
