@@ -8,6 +8,7 @@ import com.link_value.eventlv.View.ListEvent.ListEventView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import ru.gildor.coroutines.retrofit.await
+import java.util.Comparator
 
 /**
  * Created by julienb on 08/12/17.
@@ -24,9 +25,10 @@ class ListEventRepositoryImpl(
         launch(UI) {
             try {
                 val list = repoEvents.getFilteredEvents(category).await()
-                list.forEach({
-                    it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
-                })
+                list
+                    .forEach({
+                        it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
+                    })
                 if (list.isEmpty()) {
                     listener.onEmptyEvents()
                 } else {
@@ -45,9 +47,11 @@ class ListEventRepositoryImpl(
         launch(UI) {
             try {
                 val list = repoEvents.getComingEvents().await()
-                list.forEach({
-                    it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
-                })
+                //val byDate = Comparator{ o1: EventLV, o2: EventLV -> o1.startedAt?.compareTo(o2.startedAt) }
+                list.sortedWith(compareBy())
+                   .forEach({
+                        it.locationStreetPictureUrl = streetViewRepo.getStreetViewUrl(it.address)
+                    })
 
                 listener.onEventsFetched(list)
             } catch (ex: Exception) {

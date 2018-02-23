@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
+    
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,46 +22,49 @@
         android:id="@+id/event_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/lg_padding"
         android:hint="@string/label_event_name"
+        android:padding="@dimen/md_padding"
         app:layout_constraintTop_toBottomOf="parent">
+
         <EditText
             android:id="@+id/input_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            />
+            android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
+
     <TextView
         android:id="@+id/category_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/categorie_label"
-        android:labelFor="@+id/categories_spinner"
-        android:padding="@dimen/lg_padding"
         android:layout_margin="@dimen/lg_padding"
+        android:labelFor="@+id/categories_spinner"
+        android:padding="@dimen/md_padding"
+        android:text="@string/categorie_label"
         android:textSize="@dimen/md_text"
-        app:layout_constraintTop_toBottomOf="@+id/event_name"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/event_name" />
+
     <Spinner
         android:id="@+id/categories_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/lg_padding"
         android:layout_margin="@dimen/lg_padding"
-        app:layout_constraintTop_toBottomOf="@+id/event_name"
+        android:padding="@dimen/lg_padding"
         app:layout_constraintLeft_toRightOf="@id/category_label"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/event_name" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/event_address"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/label_event_address"
-        android:padding="@dimen/lg_padding"
-        app:layout_constraintTop_toBottomOf="@+id/category_label"
-        >
+        android:padding="@dimen/md_padding"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/event_location_name"
+        app:layout_constraintTop_toBottomOf="@+id/category_label">
 
         <AutoCompleteTextView
             android:id="@+id/input_address"
@@ -68,17 +79,19 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/event_location_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/lg_padding"
         android:hint="@string/label_location_name"
-        app:layout_constraintTop_toBottomOf="@+id/event_address">
+        android:padding="@dimen/md_padding"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@+id/event_address"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_label">
 
         <EditText
             android:id="@+id/input_location_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </android.support.design.widget.TextInputLayout>
 
 
@@ -88,11 +101,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
         android:gravity="center_vertical"
-        android:padding="@dimen/lg_padding"
+        android:padding="@dimen/md_padding"
         android:paddingEnd="4dp"
         android:text="@string/label_event_date"
         android:textSize="@dimen/md_text"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/input_date"
         app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
     <TextView
@@ -102,9 +117,11 @@
         android:layout_marginTop="@dimen/text_margin"
         android:ems="6"
         android:gravity="center_vertical|start"
-        android:padding="@dimen/lg_padding"
+        android:padding="@dimen/md_padding"
         android:textSize="@dimen/md_text"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/event_date"
+        app:layout_constraintEnd_toStartOf="@id/event_time"
         app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
     <TextView
@@ -113,11 +130,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
         android:gravity="center_vertical"
-        android:padding="@dimen/lg_padding"
+        android:padding="@dimen/md_padding"
         android:paddingEnd="4dp"
         android:text="@string/label_event_time"
         android:textSize="@dimen/md_text"
-        app:layout_constraintLeft_toRightOf="@+id/input_date"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/input_date"
+        app:layout_constraintEnd_toStartOf="@id/input_time"
         app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
     <TextView
@@ -127,9 +146,11 @@
         android:layout_marginTop="@dimen/text_margin"
         android:ems="4"
         android:gravity="center_vertical|start"
-        android:padding="@dimen/lg_padding"
+        android:padding="@dimen/md_padding"
         android:textSize="@dimen/md_text"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/event_time"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_location_name" />
 
     <TextView
@@ -147,7 +168,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:max="48"
         android:progress="1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -165,9 +186,9 @@
         android:id="@+id/propose_event"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_margin="@dimen/sm_margin"
         android:background="@color/colorAccent"
-        android:padding="@dimen/lg_padding"
+        android:padding="@dimen/md_padding"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
         android:src="@drawable/ic_save"
@@ -176,3 +197,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline" />
 </android.support.constraint.ConstraintLayout>
+</ScrollView>

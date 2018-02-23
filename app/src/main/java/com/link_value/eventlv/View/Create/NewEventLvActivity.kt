@@ -1,6 +1,7 @@
 package com.link_value.eventlv.View.Create
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -44,6 +45,7 @@ import com.link_value.eventlv.Presenter.CreatePresenter.CreateEventPresenter
 import com.link_value.eventlv.Repository.Create.NewEventRepositoryImpl
 import com.link_value.eventlv.Repository.List.ListCategoryRepositoryImpl
 import com.link_value.eventlv.View.ListEvent.ListCategoryView
+import com.link_value.eventlv.View.ListEvent.MainActivity
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import java.text.DateFormat
@@ -57,7 +59,7 @@ class NewEventLvActivity : AppCompatActivity(),
 {
     private lateinit var adapter: AutoCompleteAddressAdapter
     private lateinit var googleApiClient: GoogleApiClient
-    private var mDuration: Int? = null
+    private var mDuration: Int = 1
     private var mEventName: String? = null
     private var mAddress: String? = null
     private var mLocationName: String? = null
@@ -120,13 +122,15 @@ class NewEventLvActivity : AppCompatActivity(),
         propose_event.onClick(UI) {
             val isValid = validateEventLv()
             if (isValid) {
-                saveEventLv()
+                val ev = saveEventLv()
+                val i = MainActivity.newIntent(this@NewEventLvActivity, ev)
+                setResult(Activity.RESULT_OK, i)
+                finish()
             }
-
         }
     }
 
-    private fun saveEventLv() {
+    private fun saveEventLv(): EventLV {
         val loggedInUser = Partner.mockCurrentUser()
         mEventName = input_name.text.toString()
         mLocationName = input_location_name.text.toString()
@@ -143,6 +147,8 @@ class NewEventLvActivity : AppCompatActivity(),
                 mLatLng
         )
         mPresenter.persistEventLv(proposedEvent)
+
+        return proposedEvent
     }
 
     private fun validateEventLv(): Boolean {
@@ -234,6 +240,9 @@ class NewEventLvActivity : AppCompatActivity(),
     override fun onEventPersisted() {
         Toast.makeText(this@NewEventLvActivity, getString(R.string.success_new), Toast.LENGTH_LONG).show()
     }
+
+    override fun onCategorySelected(category: Category) {}
+
 
     override fun onError(message: String?) {
         Toast.makeText(this@NewEventLvActivity, getString(R.string.error_new), Toast.LENGTH_LONG).show()

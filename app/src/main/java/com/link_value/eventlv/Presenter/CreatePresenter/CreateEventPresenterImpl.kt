@@ -16,7 +16,6 @@ class CreateEventPresenterImpl(
         private val mListCategoryView: ListCategoryView,
         private val mNewRepo: NewEventRepository,
         private val mCategoryRepository: ListCategoryRepository
-        //private val addressFetcher: AddressPredictionFetcher
     ): CreateEventPresenter {
 
     override fun start() {
@@ -33,11 +32,5 @@ class CreateEventPresenterImpl(
     override fun persistEventLv(event: EventLV) {
         mNewRepo.saveEvent(event, this)
     }
-
-    /*suspend fun fetchAddresses(query: String): List<AddressEventLV> {
-        return addressFetcher.fetchAddressPrediction(query)
-    }*/
-
-
 }
 

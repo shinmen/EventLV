@@ -8,9 +8,6 @@ import com.link_value.eventlv.Model.Category
  * Created by julienb on 08/02/18.
  */
 class CategoryAdapter(context: Context, resource: Int, private val categories: List<Category>): ArrayAdapter<Category>(context, resource) {
-
-    //private var categories = ArrayList<Pair<String,Category>>()
-
     override fun getCount(): Int {
         return categories.size
     }

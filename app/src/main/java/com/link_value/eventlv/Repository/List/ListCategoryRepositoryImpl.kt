@@ -21,7 +21,7 @@ class ListCategoryRepositoryImpl(private val httpClient: HttpClient): ListCatego
                 val list = repoCategories.getCategories().await()
                 val map = HashMap<String, Category>()
                 list.forEach {
-                    map[it.name] = it
+                    map[it.slug] = it
                 }
                 listener.onCategoriesFetched(map)
             } catch (ex: Exception) {

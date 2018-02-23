@@ -1,5 +1,6 @@
 package com.link_value.eventlv.Presenter.ListPresenter
 
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 import com.link_value.eventlv.Repository.List.ListCategoryRepository
 import com.link_value.eventlv.Repository.List.ListEventRepository
@@ -21,7 +22,7 @@ class ListEventPresenterImpl(
     }
 
     override fun addEvent(event: EventLV) {
-
+        mListEventView.newEvent(event)
     }
 
     override fun waitForList() {
@@ -39,6 +40,10 @@ class ListEventPresenterImpl(
 
     override fun fetchAll() {
         mListRepo.queryComingEvents(mListEventView)
+    }
+
+    override fun moveToCategory(category: Category) {
+        mListCategoryView.onCategorySelected(category)
     }
 
 }

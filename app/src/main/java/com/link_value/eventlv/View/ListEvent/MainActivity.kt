@@ -33,8 +33,10 @@ import org.greenrobot.eventbus.EventBus
 
 
 class MainActivity : AppCompatActivity(),
-        EventLvFragment.ListListener
+        EventLvFragment.ListListener,
+        ListCategoryTabFragment.CategoryListener
     {
+
     private var mPresenter: ListEventPresenterImpl? = null
     private lateinit var mListEventFragment: EventLvFragment
     private lateinit var mListCategoryTabFragment: ListCategoryTabFragment
@@ -60,11 +62,12 @@ class MainActivity : AppCompatActivity(),
         initPresenter()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun onClickGoToNewEvent() {
         fab.setOnClickListener { view ->
             val i = NewEventLvActivity.newIntent(this)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, view as View, resources.getString(R.string.transition_add_btn))
-            startActivity(i, options.toBundle())
+            startActivityForResult(i, ADD_LIST_CODE, options.toBundle())
         }
     }
 
@@ -85,9 +88,17 @@ class MainActivity : AppCompatActivity(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == UPDATE_LIST_CODE) {
-            val eventLV = data?.extras?.get(EventLV.PARCEL_NAME) as EventLV
-            mPresenter!!.updateParticipantEvent(eventLV)
+        if (resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                UPDATE_LIST_CODE -> {
+                    val eventLV = data?.extras?.get(EventLV.PARCEL_NAME) as EventLV
+                    mPresenter!!.updateParticipantEvent(eventLV)
+                }
+                ADD_LIST_CODE -> {
+                    val eventLV = data?.extras?.get(EventLV.PARCEL_NAME) as EventLV
+                    mPresenter!!.addEvent(eventLV)
+                }
+            }
         }
     }
 
@@ -98,9 +109,13 @@ class MainActivity : AppCompatActivity(),
         startActivityForResult(i, UPDATE_LIST_CODE, options.toBundle())
     }
 
-/*    override fun onTabSelected(category: Category) {
-        //To change body of created functions use File | Settings | File Templates.
-    }*/
+    override fun onMoveToCategory(category: Category) {
+        mPresenter?.moveToCategory(category)
+    }
+
+    override fun onTabSelected(category: Category) {
+        mPresenter?.refreshWithCategory(category.slug)
+    }
 
     override fun onDestroy() {
         mPresenter = null
@@ -109,6 +124,7 @@ class MainActivity : AppCompatActivity(),
 
     companion object {
         const val UPDATE_LIST_CODE = 42
+        const val ADD_LIST_CODE = 43
         fun newIntent(packageContext: Context, event: EventLV): Intent {
             val intent = Intent(packageContext, MainActivity::class.java)
             intent.putExtra(EventLV.PARCEL_NAME, event)

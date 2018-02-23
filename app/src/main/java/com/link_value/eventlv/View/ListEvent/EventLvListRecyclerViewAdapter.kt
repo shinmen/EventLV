@@ -41,12 +41,20 @@ class EventLvListRecyclerViewAdapter(
         }
     }
 
+    fun addEvent(event: EventLV) {
+        mValues.add(event)
+        val index = mValues.indexOf(event)
+        notifyItemInserted(index)
+
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val event = mValues[position]
         Picasso.with(context)
                 .load(event.locationStreetPictureUrl)
                 .fit()
                 .centerCrop()
+                .error(android.R.drawable.stat_notify_error)
                 .placeholder(android.R.drawable.ic_menu_gallery)
                 .into(holder.mLocationPictureView)
         holder.mLocationName.text = context.resources.getString(R.string.meet_at, event.locationName)

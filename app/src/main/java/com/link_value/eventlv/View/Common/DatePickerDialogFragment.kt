@@ -38,6 +38,7 @@ class DatePickerDialogFragment : DialogFragment(),
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme)
+
         // Create a new instance of TimePickerDialog and return it
         return DatePickerDialog(activity, this, year, month, day)
     }

@@ -8,4 +8,5 @@ import com.link_value.eventlv.Model.Category
 interface ListCategoryView {
     fun onCategoriesFetched(categories :Map<String, Category>)
     fun onErrorCategoryFetch(error :String?)
+    fun onCategorySelected(category: Category)
 }

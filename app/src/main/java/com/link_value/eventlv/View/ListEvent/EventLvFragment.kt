@@ -74,6 +74,8 @@ class EventLvFragment : Fragment(),
     }
 
     override fun newEvent(event: EventLV) {
+        mListener?.onMoveToCategory(event.category)
+        mPresenter.refreshWithCategory(event.category.slug)
     }
 
     override fun replaceEvent(event: EventLV) {
@@ -113,5 +115,6 @@ class EventLvFragment : Fragment(),
 
     interface ListListener {
         fun onDisplayDetail(view: View, event: EventLV)
+        fun onMoveToCategory(category: Category)
     }
 }

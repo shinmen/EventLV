@@ -1,5 +1,6 @@
 package com.link_value.eventlv.Presenter.ListPresenter
 
+import com.link_value.eventlv.Model.Category
 import com.link_value.eventlv.Model.EventLV
 
 /**
@@ -12,4 +13,5 @@ interface ListEventPresenter {
     fun fetchAll()
     fun updateParticipantEvent(event: EventLV)
     fun addEvent(event: EventLV)
+    fun moveToCategory(category: Category)
 }
